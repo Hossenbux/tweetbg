@@ -1,6 +1,9 @@
 <?php
 
-// TWITTER API Control
+
+function tweetbg($pic)
+{
+	
   require 'tmhOAuth.php';
   require 'tmhUtilities.php';
   $tmhOAuth = new tmhOAuth(array(
@@ -11,19 +14,19 @@
   ));
 
   
-  $filename = "jpeg.jpeg";
+  $filename = $pic;
   
   $params = array(
     // Posting the Image file, irrelephant
     //'image' => "@{$_FILES['image']['tmp_name']};type={$_FILES['image']['type']};filename={$_FILES['image']['name']}",
 	'image' => "@$filename;type=JPEG;filename=$filename",
+  	'tile' => true
   );
 
-  // if we are setting the background we want it to be displayed
-  if ($_REQUEST['method'] == 'update_profile_background_image')
-    $params['use'] = 'true';
+ 
+  $params['use'] = 'true';
 
-  $code = $tmhOAuth->request('POST', $tmhOAuth->url("1/account/{$_REQUEST['method']}"),
+  $code = $tmhOAuth->request('POST', $tmhOAuth->url("1/account/update_profile_background_image"),
     $params,
     true, // use auth
     true  // multipart
@@ -33,6 +36,6 @@
     tmhUtilities::pr(json_decode($tmhOAuth->response['response']));
   }
   tmhUtilities::pr(htmlentities($tmhOAuth->response['response']));
-
+}
 
 ?>
