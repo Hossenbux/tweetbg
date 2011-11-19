@@ -4,15 +4,8 @@
  * User has successfully authenticated with Twitter. Access tokens saved to session and DB.
  */
 
-function pic500($keyword, $consumer_key="xHkW9aeTnoYk4k1lUYicCjbKY9VXjYOWxE3OsBt8", $consumer_secret="SoxoUAwEOuV2lSQKLWRcj5Tm2LM4X1l4hMlr2Skc" )
+function pic500($keyword)
 {
-
-	require_once('twitteroauth/twitteroauth.php');
-	require_once('config.php');
-
-
-	$connection = new TwitterOAuth($consumer_key, $consumer_secret, null, null);
-	
 	/* If method is set change API call made. Test is called by default. */
 	$content  = $connection->get('photos/search', array('term' => $keyword, 'rpp' => '99'));
 	
