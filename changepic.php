@@ -1,28 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
 
-/**
- * Update the users profile image, or profile background image using OAuth.
- *
- * Although this example uses your user token/secret, you can use
- * the user token/secret of any user who has authorised your application.
- *
- * Instructions:
- * Instructions:
- * 1) If you don't have one already, create a Twitter application on
- *      https://dev.twitter.com/apps
- * 2) From the application details page copy the consumer key and consumer
- *      secret into the place in this code marked with (YOUR_CONSUMER_KEY
- *      and YOUR_CONSUMER_SECRET)
- * 3) From the application details page copy the access token and access token
- *      secret into the place in this code marked with (A_USER_TOKEN
- *      and A_USER_SECRET)
- * 4) Visit this page using your web browser.
- *
- * @author themattharris
- */
-
+// TWITTER API Control
   require 'tmhOAuth.php';
   require 'tmhUtilities.php';
   $tmhOAuth = new tmhOAuth(array(
@@ -32,11 +10,11 @@ ini_set('display_errors', '1');
     'user_secret'     => 'KyUgNXSTNYWbHvlXY3kfFQsufSIkYqXTPKPqKAWclE',
   ));
 
-  // note the type and filename are set here as well
   
   $filename = "jpeg.jpeg";
   
   $params = array(
+    // Posting the Image file, irrelephant
     //'image' => "@{$_FILES['image']['tmp_name']};type={$_FILES['image']['type']};filename={$_FILES['image']['name']}",
 	'image' => "@$filename;type=JPEG;filename=$filename",
   );
