@@ -4,15 +4,15 @@
  * User has successfully authenticated with Twitter. Access tokens saved to session and DB.
  */
 
-function pic500($keyword, $consumer_key="xHkW9aeTnoYk4k1lUYicCjbKY9VXjYOWxE3OsBt8", $consumer_sectet="SoxoUAwEOuV2lSQKLWRcj5Tm2LM4X1l4hMlr2Skc" )
+function pic500($keyword, $consumer_key="xHkW9aeTnoYk4k1lUYicCjbKY9VXjYOWxE3OsBt8", $consumer_secret="SoxoUAwEOuV2lSQKLWRcj5Tm2LM4X1l4hMlr2Skc" )
 {
 	
 	session_start();
-	require_once('twitteroauth/twitteroauth.php');
+	//require_once('twitteroauth/twitteroauth.php');
 	require_once('config.php');
 
 	$access_token = $_SESSION['access_token'];
-
+	die($access_token);
 	$connection = new TwitterOAuth($consumer_key, $consumer_secret, $access_token['oauth_token'], $access_token['oauth_token_secret']);
 	
 	/* If method is set change API call made. Test is called by default. */
