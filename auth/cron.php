@@ -15,7 +15,6 @@ while($row = mysql_fetch_array($sources))
 	
 	$tweets = mysql_query("SELECT * FROM user_tweets WHERE screen_name='$name'");
 	while($tweet = mysql_fetch_array($tweets)){
-	
 		$oauth = new OAuth($conskey, $conssec, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
 		$oauth->enableDebug();
 		$oauth->setToken($row['access_token'], $row['token_secret']);
@@ -44,7 +43,6 @@ function getTweets($name, $last_id, $json, $row, $last_keyword, $conskey, $conss
 		
 		if($matches){
 			$keyword = str_replace('*', '', $matches[0]);
-			
 			if($keyword != $last_keyword) {
 				
 				require_once('500px.php');
@@ -81,9 +79,10 @@ function getTweets($name, $last_id, $json, $row, $last_keyword, $conskey, $conss
 				echo "$code\n";
 				
 				//unlink($fullPath);
-				
-				$con->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id WHERE screen_name='$name'");
-				
+				if($code == 200)
+					$con->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id WHERE screen_name='$name'");
+				if($code == 500)
+					echo "too soon\n";
 			   	// if ($code == 200) {
 			    	 // tmhUtilities::pr(json_decode($tmhOAuth->response['response']));
 			   	// }

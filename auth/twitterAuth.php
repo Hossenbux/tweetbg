@@ -80,7 +80,7 @@ class TwitterAuth {
 				VALUES ('$user->screen_name', '$user->last_id')");
 			}
 			
-			mysql_close($con->close());
+			$con->close();
 			
 		} catch (Exception $e){
 			die($e->getMessage());
