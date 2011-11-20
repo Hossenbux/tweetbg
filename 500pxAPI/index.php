@@ -6,8 +6,10 @@
 
 function pic500($keyword)
 {
-	/* If method is set change API call made. Test is called by default. */
-	$content  = $connection->get('photos/search', array('term' => $keyword, 'rpp' => '99'));
+	$oauth = new OAuth('xHkW9aeTnoYk4k1lUYicCjbKY9VXjYOWxE3OsBt8', 'SoxoUAwEOuV2lSQKLWRcj5Tm2LM4X1l4hMlr2Skc', OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
+	$oauth->enableDebug();
+	$oauth->fetch("https://api.500px.com/v1/photos/search?term=$keyword&rpp=100");
+	$content = json_decode($oauth->getLastResponse());	
 	
 	$rate = 0;
 	$rate_k = 0;

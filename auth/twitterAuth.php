@@ -46,7 +46,8 @@ class TwitterAuth {
 		$user = array(
 			'screen_name' => $json->screen_name,
 			'access_token'=> $access_token,
-			'token_secret'=> $token_secret
+			'token_secret'=> $token_secret,
+			'last_id'	=> $json->status->id
 		);
 
 		$this->saveUser( (object)$user );
@@ -65,12 +66,8 @@ class TwitterAuth {
 			VALUES ('$user->screen_name', '$user->access_token', '$user->token_secret')");
 			
 			if($ret){
-				date_default_timezone_set('America/New_York');
-				$date = new DateTime();				
-				$date->format('Y-m-d H:i:s');
-				$time = $date->getTimestamp();				
-				mysql_query("INSERT INTO user_tweet (screen_name)
-				VALUES ('$user->screen_name')");
+				mysql_query("INSERT INTO user_tweets (screen_name, last_id)
+				VALUES ('$user->screen_name', '$user->last_id')");
 			}
 			
 			mysql_close($con);

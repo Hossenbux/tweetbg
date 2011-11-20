@@ -7,7 +7,7 @@
 	});
 	
 	window.addEvent('authSuccess', function(event){
-		new Element('h1', {'html': 'You are not connected to tweetbg'}).inject(document.body);
+		new Element('h1', {'html': 'You are now connected to tweetbg'}).inject(document.body);
 	});
 	
 });
