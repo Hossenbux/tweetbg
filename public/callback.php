@@ -5,7 +5,7 @@
 	}
 </script>
 <?php 
-require_once('twitterAuth.php');
+require_once('../auth/twitterAuth.php');
 
 $twitter = new TwitterAuth();
 $twitter->getAccess();

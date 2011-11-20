@@ -32,14 +32,13 @@ while($row = mysql_fetch_array($sources))
 		
 		} catch (Exception $e){
 			//remove user record
-			die($e->getMessage());
-			
+			mysql_query("DELETE FROM user_tweets WHERE screen_name='$name'");	
 		}
 	}
 
 }
 
-echo 'done';
+echo "done\n";
 
 function getTweets($name, $last_id, $json, $row, $last_keyword){
 				
@@ -51,9 +50,9 @@ function getTweets($name, $last_id, $json, $row, $last_keyword){
 			
 			if($keyword != $last_keyword) {
 				
-				require_once('500pxAPI/index.php');
-				require_once('tmhOAuth.php');
-				require_once('tmhUtilities.php');
+				require_once('auth/500px.php');
+				require_once('auth/tmhOAuth.php');
+				require_once('auth/tmhUtilities.php');
 		
 				$fullPath = pix500tile($keyword);
 				

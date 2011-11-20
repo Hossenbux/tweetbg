@@ -3,7 +3,7 @@
  	//edit mode
  	document.getElement('.auth').addEvent('click', function(event){
  		event.preventDefault();
-		window.open('/auth/twitter.php','Twitter','width=700,height=300');
+		window.open('twitter.php','Twitter','width=700,height=300');
 	});
 	
 	window.addEvent('authSuccess', function(event){
