@@ -35,7 +35,6 @@ function pic500($keyword)
 
 function pix500tile($keyword)
 {
-	
 	$j_l =3;
 	$i_l =3;
 	
@@ -50,13 +49,17 @@ function pix500tile($keyword)
 			imagecopyresampled($new_image, $img, ($i)*140, ($j)*140, 0, 0, 140, 140, 140, 140);
 		}
 	}
-		
-	
 
-    
     $imgid = uniqid();
     $path = "imgs/$imgid.jpg";
-	imagepng($new_image, $path);
+	
+	echo "$path\n";
+	
+	try {
+		imagepng($new_image, $path);
+	} catch (Exception $e){
+		die($e->getMessage());
+	}
 	
 	return $path;
 }

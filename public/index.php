@@ -15,7 +15,18 @@
 	    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
   </head>
 
-	<body class="{{ page.layout }}">
-		<a href="#" class="auth">auth</a>
+	<body>
+		<div id="head-cont">
+			<div id="head"><button class="auth"><img src="/images/twitter-connect-button.png"</a></div>
+		</div>
+		
+	
+		
+		<div class="container">
+			<span style="font-size : 400">1</span>
+			
+		</div>
+		
+		
 	</body>
 </html>
