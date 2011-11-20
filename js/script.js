@@ -6,4 +6,8 @@
 		window.open('/auth/twitter.php','Twitter','width=700,height=300');
 	});
 	
+	window.addEvent('authSuccess', function(event){
+		new Element('h1', {'html': 'You are not connected to tweetbg'}).inject(document.body);
+	});
+	
 });

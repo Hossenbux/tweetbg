@@ -35,11 +35,7 @@ class TwitterAuth {
 		$oauth = $this->getOAuth();
 		
 		$oauth->setToken($access_token, $token_secret);
-		
-		// print_r($access_token);
-		// echo "\n";
-		// die($token_secret);
-// 		
+
 		try {
 	    	$oauth->fetch("$this->api_url/1/account/verify_credentials.json"); 
 		} catch(Exception $e){
@@ -53,11 +49,11 @@ class TwitterAuth {
 			'token_secret'=> $token_secret
 		);
 
-		$this->saveUser((object)$user);
+		$this->saveUser( (object)$user );
 	}
 
 	private function saveUser($user){
-		//die(var_dump($user));
+
 		try{
 			$con = $link = mysql_connect('localhost', 'root', 'alpha123');
 			if (!$con) {
@@ -65,10 +61,20 @@ class TwitterAuth {
 			}
 			mysql_select_db("tweetbg", $con);
 			
-			mysql_query("REPLACE INTO source_token (screen_name, access_token, token_secret)
+			$ret = mysql_query("REPLACE INTO source_token (screen_name, access_token, token_secret)
 			VALUES ('$user->screen_name', '$user->access_token', '$user->token_secret')");
 			
+			if($ret){
+				date_default_timezone_set('America/New_York');
+				$date = new DateTime();				
+				$date->format('Y-m-d H:i:s');
+				$time = $date->getTimestamp();				
+				mysql_query("INSERT INTO user_tweet (screen_name)
+				VALUES ('$user->screen_name')");
+			}
+			
 			mysql_close($con);
+			
 		} catch (Exception $e){
 			die($e->getMessage());
 		}
