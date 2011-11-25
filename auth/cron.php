@@ -11,6 +11,7 @@ $conssec = $keys[1];
 
 while($row = mysql_fetch_array($sources))
 {
+	print_r($row);
 	$name = $row['screen_name'];	
 	
 	$tweets = mysql_query("SELECT * FROM user_tweets WHERE screen_name='$name'");
@@ -44,7 +45,7 @@ function getTweets($name, $last_id, $json, $row, $last_keyword, $conskey, $conss
 		if($matches){
 			$keyword = str_replace('*', '', $matches[0]);
 			if($keyword != $last_keyword) {
-				
+				print_r($keyword);
 				require_once('500px.php');
 				require_once('tmhOAuth.php');
 				require_once('tmhUtilities.php');

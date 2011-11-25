@@ -17,13 +17,16 @@
 
 	<body>
 		<div id="head-cont">
-			<div id="head"><button class="auth"><img src="/images/twitter-connect-button.png"</a></div>
+			<div id="head"></div>
 		</div>
+		<div id="head-space"></div>
 		
 	
 		
 		<div class="container">
-			<span style="font-size : 400">1</span>
+			<a class="auth"><img src="/images/twitter.png"</a>
+			
+			
 			
 		</div>
 		
