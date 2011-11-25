@@ -31,7 +31,7 @@ class TwitterAuth {
 	
 	public function getAuth(){
 		$oauth = $this->getOAuth();
-		
+		die($this->req_url);
 	   	$request_token_info = $oauth->getRequestToken($this->req_url);
 	    header('Location: '.$this->authurl.'?oauth_token='.$request_token_info['oauth_token']);
 	}
