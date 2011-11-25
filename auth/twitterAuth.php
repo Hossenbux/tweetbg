@@ -10,6 +10,7 @@ class TwitterAuth {
 	protected $api_url = 'https://api.twitter.com';
 	protected $conskey = '';
 	protected $conssec = '';
+    
 	
 	function __construct(){
 		
@@ -31,16 +32,23 @@ class TwitterAuth {
 	
 	public function getAuth(){
 		$oauth = $this->getOAuth();
-		//die($this->req_url);
-	   	$request_token_info = $oauth->getRequestToken($this->req_url);
+	   	$request_token_info = $this->getRequest();
+        
+        $_SESSION['oauth_token'] = $request_token_info['oauth_token'];
+        $_SESSION['oauth_token_secret'] = $request_token_info['oauth_token_secret'];
+        
 	    header('Location: '.$this->authurl.'?oauth_token='.$request_token_info['oauth_token']);
 	}
+    
+    public function getRequest(){
+        $oauth = $this->getOAuth(); 
+        return $oauth->getRequestToken($this->req_url);
+    }
 
-	public function getAccess(){
+	public function getAccess($oauth_token, $oauth_token_secret, $oauth_verifier){
 		$oauth = $this->getOAuth();		
-		$request_token_info = $oauth->getRequestToken($this->req_url);
-		$oauth->setToken($_GET['oauth_token'], $request_token_info['oauth_token_secret']);
-		$access_token_info = $oauth->getAccessToken($this->acc_url);
+		$oauth->setToken($oauth_token, $oauth_token_secret);
+		$access_token_info = $oauth->getAccessToken($this->acc_url, null, $oauth_verifier);
 		$this->getSource($access_token_info['oauth_token'], $access_token_info['oauth_token_secret']);		
 	}
 	
