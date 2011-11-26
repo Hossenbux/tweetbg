@@ -4,3 +4,5 @@ db.php
 
 lappin.pem
 main.pem
+
+application/config/*.php
