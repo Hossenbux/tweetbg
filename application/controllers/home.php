@@ -5,6 +5,9 @@ class Home extends TweetBG_Controller {
 	function __construct() {
         parent::__construct();
         $this->load->library('Template');
+        $this->load->library('session');
+        if($this->session->userdata('screen_name'))
+            header('Location: user');
     }
 
     function index() {  
