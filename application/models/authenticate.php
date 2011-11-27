@@ -42,7 +42,8 @@ class Authenticate extends CI_Model
         $this->session->unset_userdata('oauth_token');
         $this->session->unset_userdata('oauth_token_secret');
         $this->session->unset_userdata('oauth_verifier');
-        $this->getSource($access_token_info['oauth_token'], $access_token_info['oauth_token_secret']);      
+        $this->getSource($access_token_info['oauth_token'], $access_token_info['oauth_token_secret']);   
+        $this->session->sess_destroy();
     }
     
     private function getSource($access_token, $token_secret){
