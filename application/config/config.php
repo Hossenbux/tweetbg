@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://tweetbg.local/';
+$config['base_url']	= 'http://tweetbg.com/';
 
 /*
 |--------------------------------------------------------------------------
