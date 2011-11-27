@@ -10,8 +10,8 @@ class builder extends TweetBG_Controller {
         
         $this->load->library('session');
         $this->load->database();
-        $this->load->model('ImageBuilder');
-        $this->load->model('Authenticate');
+        $this->load->model('imagebuilder');
+        $this->load->model('authenticate');
         
         $keys = $this->db->query("SELECT * FROM consumer WHERE source='tweetbg'")->result();
         $this->conskey = $keys[0]->consumer_key;
@@ -49,7 +49,7 @@ class builder extends TweetBG_Controller {
     }
     
     function sample($source, $keyword){
-        $img = $this->ImageBuilder->build($source, $keyword);
+        $img = $this->imagebuilder->build($source, $keyword);
         echo "<img src='/$img'>";
     }
     
@@ -65,7 +65,7 @@ class builder extends TweetBG_Controller {
                     require_once('tmhOAuth.php');
                    // require_once('tmhUtilities.php');
             
-                    $fullPath = $this->ImageBuilder->build($row->source, $keyword);
+                    $fullPath = $this->imagebuilder->build($row->source, $keyword);
                     
                     $tmhOAuth = new tmhOAuth(array(
                         'consumer_key'    => $conskey,
