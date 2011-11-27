@@ -15,6 +15,7 @@ class Home extends TweetBG_Controller {
         );
         
         $this->template->set_template($platform);
+        $this->template->add_js('js/home.js');
         $this->template->parse_view('header', 'header', $data);
         $this->template->parse_view('content', 'home', $data);  
         $this->template->parse_view('footer', 'footer', $data);             

@@ -5,13 +5,7 @@ class Auth extends TweetBG_Controller {
     function __construct() {
         parent::__construct();
         $this->load->library('session');
-        $this->load->database();
         $this->load->model('authenticate');
-        
-        $keys = $this->db->query("SELECT * FROM consumer")->result();
-
-        $this->authenticate->conskey = $keys[0]->consumer_key;
-        $this->authenticate->conssec = $keys[0]->consumer_secret;
     }
 
     public function index() {

@@ -50,7 +50,8 @@ class builder extends TweetBG_Controller {
     
     function sample($source, $keyword){
         $img = $this->imagebuilder->build($source, $keyword);
-        echo "<img src='/$img'>";
+        echo $img;
+        //unlink("$img");   
     }
     
     function getTweets($name, $last_id, $json, $row, $last_keyword, $conskey, $conssec){
@@ -104,7 +105,7 @@ class builder extends TweetBG_Controller {
                     //unlink($fullPath);
                     if($code == 200) {
                         $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id WHERE screen_name='$name'");
-                        unlink($fullPath);                   
+                        unlink("$fullPath");                   
                     }
                     if($code == 500)
                         echo "fail\n";
