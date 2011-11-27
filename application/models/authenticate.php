@@ -12,6 +12,13 @@ class Authenticate extends CI_Model
 
     function __construct() {
         parent::__construct();
+        
+        $this->load->database();
+        
+        $keys = $this->db->query("SELECT * FROM consumer")->result();
+
+        $this->conskey = $keys[0]->consumer_key;
+        $this->conssec = $keys[0]->consumer_secret;
     }
     
     private function getOAuth(){
@@ -54,7 +61,8 @@ class Authenticate extends CI_Model
             die($e->getMessage());
         }
         $json = json_decode($oauth->getLastResponse()); 
-
+        
+        $this->session->set_userdata('screen_name', $json->screen_name);
         $user = array(
             'screen_name' => $json->screen_name,
             'access_token'=> $access_token,
