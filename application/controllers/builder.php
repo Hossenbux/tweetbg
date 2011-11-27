@@ -23,7 +23,7 @@ class builder extends TweetBG_Controller {
         
         foreach ($sources->result() as $row)
         {
-            print_r($row);
+            var_dump($row);
             $name = $row->screen_name;    
             
             $tweets = $this->db->query("SELECT * FROM user_tweets WHERE screen_name='$name'");
@@ -61,9 +61,9 @@ class builder extends TweetBG_Controller {
             if($matches) {
                 $keyword = str_replace('*', '', $matches[0]);
                 if($keyword != $last_keyword) {
-                    print_r($keyword);
+                    var_dump($keyword);
                     require_once('tmhOAuth.php');
-                    //require_once('tmhUtilities.php');
+                   // require_once('tmhUtilities.php');
             
                     $fullPath = $this->ImageBuilder->build($row->source, $keyword);
                     
@@ -76,7 +76,7 @@ class builder extends TweetBG_Controller {
                                 
                     $params = array(
                         //'image' => "@{$_FILES['image']['tmp_name']};type={$_FILES['image']['type']};filename={$_FILES['image']['name']}",
-                        'image' => "/$fullPath;type=JPEG",
+                        'image' => "@$fullPath",
                         'tile' => true,
                         'use'=> true
                     );
@@ -90,15 +90,22 @@ class builder extends TweetBG_Controller {
                         true  // multipart
                     );
                     
+                        // $oauth = new OAuth($this->conskey, $this->conssec, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
+                        // $oauth->enableDebug();
+                        // $oauth->setToken($row->access_token, $row->token_secret);
+                        // $oauth->fetch("https://api.twitter.com/1/account/update_profile_background_image.json", $params, OAUTH_HTTP_METHOD_POST);
+                    
                     } catch (Exception $e){
-                        die($e->getMessage());
+                        die(var_dump($e->getMessage()));
                     }
                     
-                    echo "$code\n";
+                    echo "code: $code\n";
                     
                     //unlink($fullPath);
-                    if($code == 200)
+                    if($code == 200) {
                         $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id WHERE screen_name='$name'");
+                        unlink($fullPath);                   
+                    }
                     if($code == 500)
                         echo "fail\n";
                     // if ($code == 200) {
