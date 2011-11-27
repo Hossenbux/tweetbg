@@ -15,7 +15,7 @@ class User extends TweetBG_Controller {
         $platform = 'default';   
         $data = array(
             'screen_name'  => $this->session->userdata('screen_name'),
-            'source' => "500px",
+            'source' => '500px',
             'search' => 'keyword'
         );
         
@@ -29,5 +29,9 @@ class User extends TweetBG_Controller {
     
     public function saveSettings($screen_name, $access_token){ //cause I am too fucking lazy to generate my own identification protocol.
         
+    }
+    
+    public function logout(){
+        $this->session->sess_destroy();
     }
 }
