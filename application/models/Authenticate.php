@@ -15,10 +15,10 @@ class Authenticate extends CI_Model
     }
     
     private function getOAuth(){
-            $oauth = new OAuth($this->conskey, $this->conssec, OAUTH_SIG_METHOD_HMACSHA1,OAUTH_AUTH_TYPE_URI);
-            $oauth->enableDebug();
-            return $oauth;
-        }
+        $oauth = new OAuth($this->conskey, $this->conssec, OAUTH_SIG_METHOD_HMACSHA1,OAUTH_AUTH_TYPE_URI);
+        $oauth->enableDebug();
+        return $oauth;
+    }
         
     public function getAuth(){
         $oauth = $this->getOAuth();
