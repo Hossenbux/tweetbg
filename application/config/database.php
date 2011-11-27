@@ -49,8 +49,8 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = '';
-$db['default']['password'] = '';
+$db['default']['username'] = 'root';
+$db['default']['password'] = 'alpha123';
 $db['default']['database'] = 'tweetbg';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
