@@ -9,8 +9,7 @@ class Home extends TweetBG_Controller {
 
     function index() {  
         
-        $platform = 'default';
-        
+        $platform = 'default';   
         $data = array(
             'title'  => 'hai'
         );
