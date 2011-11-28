@@ -43,24 +43,71 @@ body {
 	    display: inline-block;
 	}
 	
-	.getSample
-	{
-		margin-bottom:10px;
-	}
-	
-	.sample-image
-	{
-		display:block;
-		margin:0 auto;
-		
-		&.loading {
-		    background-image: url('images/preload.gif');
-		    background-repeat: no-repeat;
-		    background-position: center center;
-		    height: 200px;
-		    width: 200px;
-		}
-	}
+	.settings{
+	    text-align: left;
+	    width: 700px;
+	    
+	    ul {
+	        
+	        li {
+	            margin: 0 25px;
+	            line-height: 25px;
+	            input {
+	                margin: 0 5px;
+	                vertical-align: middle;
+	            }
+	        }
+	    }
+	    
+    	.getSample{
+    		margin-bottom:10px;
+    	}
+    	
+    	.sample-image {
+    		display:block;
+    		margin:10px auto;
+    		min-height: 50px;
+    		text-align: center; //whatever
+    		//border-top: 1px solid silver;
+    		padding: 10px;
+    		
+    		&:empty:before {
+    		    color: #555;
+    		    content: "Click preview to see what your background will be like.";
+    		    vertical-align: middle;
+    		    line-height: 50px;
+    		}
+    		
+    		&.loading {
+    		    
+    		    &:empty:before{ 
+    		        content: ""; 
+    		   }
+    		   
+    		    background-image: url('images/preload.gif');
+    		    background-repeat: no-repeat;
+    		    background-position: center center;
+    		    height: 200px;
+    		    width: 200px;
+    		}
+    	}
+    	
+    	.actions {
+    	    padding-left: 20px;
+    	    height: 35px;
+    	    
+    	    & > div {
+    	        display: inline;
+    	    }
+    	    
+    	    .right {
+    	        float: right;
+    	    }
+    	    .left {
+    	        float: left;
+    	    }
+    	}
+    }
 }
 
 
