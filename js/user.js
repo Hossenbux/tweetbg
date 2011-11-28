@@ -24,7 +24,7 @@
         event.preventDefault();
 
         new Request({
-            'url': 'user/save/'+this.getElement('[name=source]:checked').value+'/'+this.getElement('[name=search]:checked').value,
+            'url': 'user/saveSettings/'+this.getElement('[name=source]:checked').value+'/'+this.getElement('[name=search]:checked').value,
             'method': 'PUT',
             'onSuccess': function(img) {
                 //do something cool

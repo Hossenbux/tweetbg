@@ -6,7 +6,9 @@ class User extends TweetBG_Controller {
         parent::__construct();
         
         $this->load->library('session');
+        $this->load->database();
         $this->load->library('Template');
+        $this->load->model('authenticate');
         $this->load->database();
       
     }
@@ -15,6 +17,7 @@ class User extends TweetBG_Controller {
         $platform = 'default';   
         $data = array(
             'screen_name'  => $this->session->userdata('screen_name'),
+            'avatar' => $this->session->userdata('avatar'),
             'source' => '500px',
             'search' => 'keyword'
         );
@@ -27,8 +30,14 @@ class User extends TweetBG_Controller {
         $this->template->render();
     }
     
-    public function saveSettings($screen_name, $access_token){ //cause I am too fucking lazy to generate my own identification protocol.
-        
+    public function saveSettings($source, $search){ //cause I am too fucking lazy to generate my own identification protocol.
+       $screen_name = $this->session->userdata('screen_name');
+       try{
+            $this->db->query("UPDATE source_token SET source='$source', search='$search' WHERE screen_name='$screen_name'");
+            echo '200';
+       } catch (Exception $e){
+           echo $e->getMessage();
+       }       
     }
     
     public function logout(){
