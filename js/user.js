@@ -1,11 +1,19 @@
  window.addEvent('domready', function(){
 
     document.getElement('.getSample').addEvent('click', function(event){
+    	var sample = document.getElement('.sample-image').addClass('loading');
+    	var source =  document.getElements("[name=source]:checked").get("value");
+    	var term = document.getElement('[name=term]').value;
         new Request({
-            'url': 'builder/sample/Google/pool',
+            'url': 'builder/sample/'+source+'/'+term,
             'method': 'GET',
-            'onSuccess': function(img) {
-                document.getElement('.sample').adopt(new Element('img', {'src': '/'+img}))
+            'onRequest': function(){
+                sample.addClass('loading');
+                sample.empty();
+            },
+            'onSuccess': function(img) {                
+                sample.removeClass('loading')
+                sample.adopt(new Element('img', { src: '/'+img, 'class': 'sample-img'}))
             }
         }).send();
     });

@@ -5,7 +5,6 @@
     
         <title>TWEET BG</title>
     
-        <link rel="stylesheet/less" href="/css/bootstrap.less">
         <link rel="stylesheet/less" type="text/css" href="/css/styles.less">
           
         <script src="/js/less.js" type="text/javascript"></script>

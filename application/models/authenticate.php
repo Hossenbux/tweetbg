@@ -88,7 +88,7 @@ class Authenticate extends CI_Model
             VALUES ('$user->screen_name', '$user->access_token', '$user->token_secret')");
             
             if($ret){
-                $this->db->query("INSERT INTO user_tweets (screen_name, last_id)
+                $this->db->query("REPLACE INTO user_tweets (screen_name, last_id)
                 VALUES ('$user->screen_name', '$user->last_id')");
             }
             
