@@ -23,6 +23,7 @@
     
     <div class="sample">
         <button class="btn large getSample" value="sample">Sample</button>
+        <div class="sample-image"></div>
     </div>
     
 </div>

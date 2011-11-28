@@ -1,27 +1,18 @@
  window.addEvent('domready', function(){
 
     document.getElement('.getSample').addEvent('click', function(event){
-    	
+    	var sample = document.getElement('.sample-image').addClass('loading');
     	var source =  document.getElements("[name=source]:checked").get("value");
-    	var sampleimg = document.getElement(".sample-img");
-    	var preload = new Element('img', {id: "loading","src":"/images/preload.gif"})
-    	document.getElement('.getSample').inject( preload , "after");
-           
-    	
         new Request({
             'url': 'builder/sample/'+source+'/pool',
             'method': 'GET',
-            'onSuccess': function(img) {
-            	
-            	if( sampleimg )
-            	{
-            		document.getElement(".sample-img").set("src", img)
-            	} 
-            		else 
-            	{
-            		document.getElement('.sample').adopt(new Element('img', { src: '/'+img, 'class': 'sample-img'}))
-            	}
-                document.getElement('#loading').destroy();
+            'onRequest': function(){
+                sample.addClass('loading');
+                sample.empty();
+            },
+            'onSuccess': function(img) {                
+                sample.removeClass('loading')
+                sample.adopt(new Element('img', { src: '/'+img, 'class': 'sample-img'}))
             }
         }).send();
     });
