@@ -20,9 +20,9 @@
                 <li><input name="search" type="radio" value="string" <?= $search == 'string' ? "checked" : "" ?>>String</li>
             </ul>
         </div>
-    
-    
-        <div class="sample">           
+      
+        <div class="sample">
+            <input name="term" class="xlarge" placeholder="a word to search with">           
             <div class="sample-image"></div>
         </div>
     

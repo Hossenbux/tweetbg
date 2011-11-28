@@ -3,8 +3,9 @@
     document.getElement('.getSample').addEvent('click', function(event){
     	var sample = document.getElement('.sample-image').addClass('loading');
     	var source =  document.getElements("[name=source]:checked").get("value");
+    	var term = document.getElement('[name=term]').value;
         new Request({
-            'url': 'builder/sample/'+source+'/pool',
+            'url': 'builder/sample/'+source+'/'+term,
             'method': 'GET',
             'onRequest': function(){
                 sample.addClass('loading');
