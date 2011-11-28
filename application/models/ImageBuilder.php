@@ -18,7 +18,11 @@ class ImageBuilder extends CI_Model
             for ($j = 0; $j < $j_l; $j++)
             {
                 $img = null;
-                $img = imagecreatefromjpeg($images[rand(0, count($images)-1)]);
+                try {
+                    $img = imagecreatefromjpeg($images[rand(0, count($images)-1)]);
+                } catch (Exception $e){
+                    $j--;
+                }
                  
                 imagecopyresampled($new_image, $img, ($i)*140, ($j)*140, 0, 0, 140, 140, 140, 140);
             }
@@ -53,10 +57,6 @@ class ImageBuilder extends CI_Model
             }
             $c++;
         }
-        
-        //$img_url = $content->photos[rand(0,99)]->image_url;
-        //$img_url = str_replace("2.jpg", "4.jpg", $img_url_);
-        
         return $images;
         
     }
@@ -91,6 +91,33 @@ class ImageBuilder extends CI_Model
     }
      
       function picGoogle($keyword) {
-        return;        
+        $count = 0;
+        $images = array();
+        $url = "https://ajax.googleapis.com/ajax/services/search/images?" .
+           "v=1.0&q=$keyword&as_filetype=jpg&rsz=8";
+        do {
+            // sendRequest
+            // note how referer is set manually
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_REFERER, "http://tweetbg.local");
+            $body = curl_exec($ch);
+            curl_close($ch);
+            
+            // now, process the JSON string
+            $json = json_decode($body);
+    
+            foreach($json->responseData->results as $photo)
+            {            
+                array_push($images, $photo->url);
+            }
+            $count += 8;
+            $url = $url = "https://ajax.googleapis.com/ajax/services/search/images?" .
+                "v=1.0&q=$keyword&as_filetype=jpg&rsz=8&start=$count";                        
+        } while($count < 20);
+        
+        return $images;
+              
     }
 }

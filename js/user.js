@@ -2,7 +2,7 @@
 
     document.getElement('.getSample').addEvent('click', function(event){
         new Request({
-            'url': 'builder/sample/Flickr/coffee',
+            'url': 'builder/sample/Google/pool',
             'method': 'GET',
             'onSuccess': function(img) {
                 document.getElement('.sample').adopt(new Element('img', {'src': '/'+img}))
