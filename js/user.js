@@ -2,7 +2,7 @@
 
     document.getElement('.getSample').addEvent('click', function(event){
         new Request({
-            'url': 'builder/sample/500px/coffee',
+            'url': 'builder/sample/Google/pool',
             'method': 'GET',
             'onSuccess': function(img) {
                 document.getElement('.sample').adopt(new Element('img', {'src': '/'+img}))
@@ -24,7 +24,7 @@
         event.preventDefault();
 
         new Request({
-            'url': 'user/save/'+this.getElement('[name=source]:checked').value+'/'+this.getElement('[name=search]:checked').value,
+            'url': 'user/saveSettings/'+this.getElement('[name=source]:checked').value+'/'+this.getElement('[name=search]:checked').value,
             'method': 'PUT',
             'onSuccess': function(img) {
                 //do something cool

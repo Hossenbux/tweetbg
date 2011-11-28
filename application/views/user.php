@@ -1,5 +1,6 @@
 <div class="settings container">
     <h1>Hello <?= $screen_name ?>,</h1>
+    <img src="<?= $avatar ?>">
     <button class="btn large logout" value="logout">Logout</button>
     <form name="options" method="PUT" action="user">
         <div class="source">

@@ -26,6 +26,13 @@ class Authenticate extends CI_Model
         $oauth->enableDebug();
         return $oauth;
     }
+    
+    protected function getTokens(){
+        return array(
+            'consumer'  => $this->conskey,
+            'secret'    => $this->conssec
+        );
+    }
         
     public function getAuth(){
         $oauth = $this->getOAuth();
@@ -63,6 +70,7 @@ class Authenticate extends CI_Model
         $json = json_decode($oauth->getLastResponse()); 
         
         $this->session->set_userdata('screen_name', $json->screen_name);
+        $this->session->set_userdata('avatar', $json->profile_image_url);
         $user = array(
             'screen_name' => $json->screen_name,
             'access_token'=> $access_token,

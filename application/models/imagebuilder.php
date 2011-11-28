@@ -10,6 +10,7 @@ class ImageBuilder extends CI_Model
         $j_l =3;
         $i_l =3;
         $source = "pic".$source;
+        $images = $this->{$source}($keyword);
         
         $new_image = imagecreatetruecolor(140*$i_l, 140*$j_l);
         for ($i = 0; $i < $i_l; $i++)
@@ -17,7 +18,11 @@ class ImageBuilder extends CI_Model
             for ($j = 0; $j < $j_l; $j++)
             {
                 $img = null;
-                $img = imagecreatefromjpeg($this->{$source}($keyword));
+                try {
+                    $img = imagecreatefromjpeg($images[rand(0, count($images)-1)]);
+                } catch (Exception $e){
+                    $j--;
+                }
                  
                 imagecopyresampled($new_image, $img, ($i)*140, ($j)*140, 0, 0, 140, 140, 140, 140);
             }
@@ -41,72 +46,78 @@ class ImageBuilder extends CI_Model
         $oauth->fetch("https://api.500px.com/v1/photos/search?term=$keyword&rpp=100");
         $content = json_decode($oauth->getLastResponse());  
 
-        $k = 0;       
-        $rated_arr = array();
-        
+        $c = 0;
+        $images = array();
         foreach($content->photos as $photo)
-        {
-            
-            if ($photo->rating > 5) { 
-                $rated_arr[] = $k; 
+        {            
+            if ($photo->rating < 5) { 
+                unset($content->photos[$c]);
+            } else {
+                array_push($images, $photo->image_url);
             }
-            $k++;
+            $c++;
         }
-        
-        $img_url = $content->photos[array_rand($rated_arr)]->image_url;
-        //$img_url = str_replace("2.jpg", "4.jpg", $img_url_);
-        
-        return $img_url;
+        return $images;
         
     }
     
      function picFlickr($keyword) {
-        $oauth = new OAuth('xHkW9aeTnoYk4k1lUYicCjbKY9VXjYOWxE3OsBt8', 'SoxoUAwEOuV2lSQKLWRcj5Tm2LM4X1l4hMlr2Skc', OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
+        $oauth = new OAuth('6b7cf68c49a2240ea83f077f8a4640eb', 'f71ccb2b1b52a473', OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
         $oauth->enableDebug();
-        $oauth->fetch("https://api.500px.com/v1/photos/search?term=$keyword&rpp=100");
-        $content = json_decode($oauth->getLastResponse());  
-
-        $k = 0;       
-        $rated_arr = array();
+        $params = array(
+            'method' => 'flickr.photos.search',
+            'text' => $keyword,
+            'extras' => 'url_s',
+            'format' => 'json',
+            'safe_search'=> '2',
+            'nojsoncallback' => true,
+        );
+        try{
+            $oauth->fetch("http://api.flickr.com/services/rest/", $params, OAUTH_HTTP_METHOD_GET);
+        } catch (Exception $e){
+            echo $e->getMessage();
+            return;
+        }
+        $content = json_decode($oauth->getLastResponse());
         
-        foreach($content->photos as $photo)
-        {
-            
-            if ($photo->rating > 5) { 
-                $rated_arr[] = $k; 
-            }
-            $k++;
+        $images = array();
+        foreach($content->photos->photo as $photo)
+        {            
+            array_push($images, $photo->url_s);
         }
         
-        $img_url = $content->photos[array_rand($rated_arr)]->image_url;
-        //$img_url = str_replace("2.jpg", "4.jpg", $img_url_);
-        
-        return $img_url;
+        return $images;
         
     }
      
       function picGoogle($keyword) {
-        $oauth = new OAuth('xHkW9aeTnoYk4k1lUYicCjbKY9VXjYOWxE3OsBt8', 'SoxoUAwEOuV2lSQKLWRcj5Tm2LM4X1l4hMlr2Skc', OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
-        $oauth->enableDebug();
-        $oauth->fetch("https://api.500px.com/v1/photos/search?term=$keyword&rpp=100");
-        $content = json_decode($oauth->getLastResponse());  
-
-        $k = 0;       
-        $rated_arr = array();
-        
-        foreach($content->photos as $photo)
-        {
+        $count = 0;
+        $images = array();
+        $url = "https://ajax.googleapis.com/ajax/services/search/images?" .
+           "v=1.0&q=$keyword&as_filetype=jpg&rsz=8";
+        do {
+            // sendRequest
+            // note how referer is set manually
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_REFERER, "http://tweetbg.local");
+            $body = curl_exec($ch);
+            curl_close($ch);
             
-            if ($photo->rating > 5) { 
-                $rated_arr[] = $k; 
+            // now, process the JSON string
+            $json = json_decode($body);
+    
+            foreach($json->responseData->results as $photo)
+            {            
+                array_push($images, $photo->url);
             }
-            $k++;
-        }
+            $count += 8;
+            $url = $url = "https://ajax.googleapis.com/ajax/services/search/images?" .
+                "v=1.0&q=$keyword&as_filetype=jpg&rsz=8&start=$count";                        
+        } while($count < 20);
         
-        $img_url = $content->photos[array_rand($rated_arr)]->image_url;
-        //$img_url = str_replace("2.jpg", "4.jpg", $img_url_);
-        
-        return $img_url;
-        
+        return $images;
+              
     }
 }
