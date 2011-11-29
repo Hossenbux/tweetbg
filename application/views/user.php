@@ -37,7 +37,7 @@
             <h2>Choose your search type.</h2>
             <ul class="unstyled">
                 <li><input name="search" type="radio" value="keyword" <?= $search == 'keyword' ? "checked" : "" ?>>Keyword</li>
-                <li><input name="search" type="radio" value="string" <?= $search == 'string' ? "checked" : "" ?>>String</li>
+                <li><input name="search" type="radio" disabled="true" value="string" <?= $search == 'string' ? "checked" : "" ?>>String</li>
             </ul>
         </div>
       
