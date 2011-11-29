@@ -17,13 +17,86 @@ class builder extends TweetBG_Controller {
         $this->conskey = $keys[0]->consumer_key;
         $this->conssec =  $keys[0]->consumer_secret;
     }
+	
+	
+	
+	
+	
+    
+    function cron() {        
+        $sources =  $this->db->query("SELECT * FROM source_token");
+        
+        foreach ($sources->result() as $row)
+        {
+           
+            $name = $row->screen_name;    
+            
+            $tweets = $this->db->query("SELECT * FROM user_tweets WHERE screen_name='$name'");
+            
+             foreach ($tweets->result() as $tweet) {
+                $oauth = new OAuth($this->conskey, $this->conssec, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
+                $oauth->enableDebug();
+                $oauth->setToken($row->access_token, $row->token_secret);
+                $last_id = $tweet->last_id;
+                
+                try {
+                    $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
+                    $json = json_decode($oauth->getLastResponse()); 
+                    $this->getKeyword($name, $last_id, $json, $row, $tweet->last_keyword, $this->conskey, $this->conssec);
+                	
+                } catch (Exception $e){
+                    //remove user record
+                    $this->db->query("DELETE FROM user_tweets WHERE screen_name='$name'"); // After executing this, no more updating bgs for user, look at line #34 and #36
+                }
+            }
+        }
+       
+    }
+
+
+	/*
+	 * Finds a keyword in recent tweets, should be Builder(twitter?) model
+	 */
+	function getKeyword($name, $last_id, $tweets, $row, $last_keyword, $conskey, $conssec)
+	{
+		$i = 0;
+		while(!($match = $this->matchStyle($tweets[$i]->text, '*'))) {$i++;} // Finds a tweet with star or the first one with combination of words
+		
+		if(count($match) > 0)
+		{
+			$tweet  = $tweets[$i];
+			echo "do somehting with ". $match[1]; 
+			// Generate and upload pic
+
+			print_r($tweet);
+			// Update last_id with $tweet->id
+		}
+	}
+	
+	/*
+	 * Takes Tweet text and Match style, by determining the meaningful words or  *star* match by default
+	 */
+	function matchStyle($str, $style = "*")
+	{
+		preg_match('/([a-zA-Z0-9_-]+)\*/', $str, $matches);
+		return $matches;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
     function run() {        
         $sources =  $this->db->query("SELECT * FROM source_token");
         
         foreach ($sources->result() as $row)
         {
-            var_dump($row);
+           
             $name = $row->screen_name;    
             
             $tweets = $this->db->query("SELECT * FROM user_tweets WHERE screen_name='$name'");
@@ -38,7 +111,7 @@ class builder extends TweetBG_Controller {
                     $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
                     $json = json_decode($oauth->getLastResponse()); 
                     $this->getTweets($name, $last_id, $json, $row, $tweet->last_keyword, $this->conskey, $this->conssec);
-                
+                	
                 } catch (Exception $e){
                     //remove user record
                     $this->db->query("DELETE FROM user_tweets WHERE screen_name='$name'");   
@@ -47,15 +120,17 @@ class builder extends TweetBG_Controller {
         }
        
     }
+
+
     
     function sample($source, $keyword){
         $img = $this->imagebuilder->build($source, $keyword);
         echo $img;
         //unlink("$img");   
     }
-    
+	
     function getTweets($name, $last_id, $json, $row, $last_keyword, $conskey, $conssec){
-                
+                echo "tweet";
         foreach($json as $single){
             preg_match('/([a-zA-Z0-9_-]+)\*/', $single->text, $matches);
             
@@ -104,7 +179,7 @@ class builder extends TweetBG_Controller {
                     
                     //unlink($fullPath);
                     if($code == 200) {
-                        $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id WHERE screen_name='$name'");
+                       // $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id WHERE screen_name='$name'");
                         unlink("$fullPath");                   
                     }
                     if($code == 500)
