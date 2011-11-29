@@ -51,7 +51,7 @@
                  <button class="btn large getSample" value="sample">Sample</button>
             </div>
             <div class="right">
-                <button class="btn large" type="submit" value="Save">Save</button>
+                <button class="btn large save" value="Save">Save</button>
                 <button class="btn large logout" value="logout">Logout</button>
             </div>
         </div>

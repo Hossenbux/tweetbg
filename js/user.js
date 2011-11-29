@@ -31,16 +31,21 @@
     
     document.getElement('form[name=options]').addEvent('submit', function(event){
         event.preventDefault();
-
+        //document.getElement('.getSample').fireEvent('click');
+        
+    });
+    
+    document.getElement('.save').addEvent('click', function(event){
+        event.preventDefault();
         new Request({
-            'url': 'user/saveSettings/'+this.getElement('[name=source]:checked').value+'/'+this.getElement('[name=search]:checked').value,
+            'url': 'user/saveSettings/'+document.getElement('[name=source]:checked').value+'/'+document.getElement('[name=search]:checked').value,
             'method': 'PUT',
             'onSuccess': function(img) {
                 //do something cool
                 document.getElement('.success').wink(2000);
             }
         }).send();
-    });
+    })
     
 
     document.getElements('.fadeout').addEvent('click', function(event){
