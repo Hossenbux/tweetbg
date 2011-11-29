@@ -17,40 +17,39 @@ class builder extends TweetBG_Controller {
         $this->conskey = $keys[0]->consumer_key;
         $this->conssec =  $keys[0]->consumer_secret;
     }
-	
-	
-	
-	
-	
-    
-    function cron() {        
-        $sources =  $this->db->query("SELECT * FROM source_token");
-        
-        foreach ($sources->result() as $row)
-        {
-           
-            $name = $row->screen_name;    
+
+    function cron($my_consumer, $my_secret) {
+        if($my_consumer == $this->conskey && $my_secret == $this->conssec) {
+                 
+            $sources =  $this->db->query("SELECT * FROM source_token");
             
-            $tweets = $this->db->query("SELECT * FROM user_tweets WHERE screen_name='$name'");
-            
-             foreach ($tweets->result() as $tweet) {
-                $oauth = new OAuth($this->conskey, $this->conssec, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
-                $oauth->enableDebug();
-                $oauth->setToken($row->access_token, $row->token_secret);
-                $last_id = $tweet->last_id;
+            foreach ($sources->result() as $row)
+            {
+               
+                $name = $row->screen_name;    
                 
-                try {
-                    $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
-                    $json = json_decode($oauth->getLastResponse()); 
-                    $this->getKeyword($name, $last_id, $json, $row, $tweet->last_keyword, $this->conskey, $this->conssec);
-                	
-                } catch (Exception $e){
-                    //remove user record
-                    $this->db->query("DELETE FROM user_tweets WHERE screen_name='$name'"); // After executing this, no more updating bgs for user, look at line #34 and #36
+                $tweets = $this->db->query("SELECT * FROM user_tweets WHERE screen_name='$name'");
+                
+                 foreach ($tweets->result() as $tweet) {
+                    $oauth = new OAuth($this->conskey, $this->conssec, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
+                    $oauth->enableDebug();
+                    $oauth->setToken($row->access_token, $row->token_secret);
+                    $last_id = $tweet->last_id;
+                    
+                    try {
+                        $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
+                        $json = json_decode($oauth->getLastResponse()); 
+                        $this->getKeyword($name, $last_id, $json, $row, $tweet->last_keyword, $this->conskey, $this->conssec);
+                    	
+                    } catch (Exception $e){
+                        //remove user record
+                        $this->db->query("DELETE FROM user_tweets WHERE screen_name='$name'"); // After executing this, no more updating bgs for user, look at line #34 and #36
+                    }
                 }
             }
+        } else {
+            $this->output->set_status_header('401');
         }
-       
     }
 
 
