@@ -9,6 +9,7 @@
           
         <script src="/js/less.js" type="text/javascript"></script>
         <script src="/js/mootools.js" type="text/javascript"></script>
+        <script src="/js/mootoolsmore.js" type="text/javascript"></script>
         <script src="/js/script.js" type="text/javascript"></script>
         <?= $_scripts ?>
     

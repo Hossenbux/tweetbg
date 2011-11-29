@@ -1,4 +1,24 @@
+
 <div class="settings container">
+    
+    <div class="alert-message success fade in" data-alert="alert">
+        <a class="fadeout close" href="#">×</a>
+        <p><strong>Success!</strong> Your settings have been saved.</p>
+    </div>
+    
+    <div class="alert-message danger fade in" data-alert="alert">
+        <a class="fadeout close" href="#">×</a>
+        <p><strong>Uh-oh!</strong> Something went wrong. Please try again.</p>
+    </div>
+   
+    <div class="alert-message block-message error fade in" data-alert="alert">
+        <a class="fadeout close" href="#">×</a>
+        <p><strong>Oh hai der!</strong> Thank you for using our application. We are currently developing the app further to me more dynamic and customizable. Feel free to checkout our list of features by clicking the button below.</p>
+        <div class="alert-actions">
+          <button class="btn small more">Learn more</button> <button class="btn small fadeout">Close</button>
+        </div>
+    </div>
+    
     <img src="<?= $avatar ?>">
     <h1>Hello <?= $screen_name ?>,</h1>
     

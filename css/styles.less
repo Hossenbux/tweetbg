@@ -6,13 +6,30 @@ body {
     color: #CCCCCC;
     background-color: #E2E2E2;
     
+    a:hover {
+        cursor: pointer;
+    }
+    
+    .alert-message {
+        margin-top: -35px;
+        
+        &.success, &.danger {
+            display: none;
+            position: fixed;
+            top: 50px;
+            z-index: 100;
+            width: 700px;
+        }
+    } 
+    
     #head-cont {
 		width: 100%;
         height: 164px;
         left: 0;
-	    position: fixed;
+	    position: absolute;
 	    top: 0;
         background-image:url('images/bg.jpg');
+        z-index: 100;
 		
 		#head  {
 		    height: 162px;
@@ -34,9 +51,9 @@ body {
 		margin: 40px auto;
 		text-align: center;
 		
-		.auth {
-
-			}
+		.alert-message {
+		    
+		}
 	}
 	
 	.unstyled li {
@@ -84,7 +101,7 @@ body {
         		
         		&:empty:before {
         		    color: #555;
-        		    content: "Click preview to see what your background will be like.";
+        		    content: "Click sample to see what your background will be like.";
         		    vertical-align: middle;
         		    line-height: 50px;
         		}
