@@ -1,6 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class User extends TweetBG_Controller {
+    protected $user;
     
     function __construct() {
         parent::__construct();
@@ -10,15 +11,19 @@ class User extends TweetBG_Controller {
         $this->load->library('Template');
         $this->load->model('authenticate');
         $this->load->database();
+        
+        $screen_name = $this->session->userdata('screen_name');
+        $this->user = $this->db->query("SELECT * FROM source_token WHERE screen_name='$screen_name'")->result();
+        $this->user = $this->user[0];
       
     }
 
     public function index() {
         $platform = 'default';   
         $data = array(
-            'screen_name'  => $this->session->userdata('screen_name'),
+            'screen_name'  => $this->user->screen_name,
             'avatar' => $this->session->userdata('avatar'),
-            'source' => '500px',
+            'source' => $this->user->source,
             'search' => 'keyword'
         );
         
