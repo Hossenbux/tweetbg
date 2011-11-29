@@ -4,6 +4,7 @@
     	var sample = document.getElement('.sample-image').addClass('loading');
     	var source =  document.getElements("[name=source]:checked").get("value");
     	var term = document.getElement('[name=term]').value;
+    	if(term.length == 0) term = "coffee";
         new Request({
             'url': 'builder/sample/'+source+'/'+term,
             'method': 'GET',
@@ -36,14 +37,15 @@
             'method': 'PUT',
             'onSuccess': function(img) {
                 //do something cool
+                document.getElement('.success').wink(2000);
             }
         }).send();
     });
     
-    window.addEvent('deleteSample', function(event){
-        
+
+    document.getElements('.fadeout').addEvent('click', function(event){
+        event.preventDefault();
+        this.getParent('.alert-message').nix('true');
     });
-    
-    
-    
+
 });
