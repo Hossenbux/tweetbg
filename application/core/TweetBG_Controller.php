@@ -12,7 +12,7 @@ class TweetBG_Controller extends CI_Controller {
     }
     
     protected function getConsumer(){
-        return $this->$this->conssec;
+        return $this->conssec;
     }
     
     protected function getSecret() {
