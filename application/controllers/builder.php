@@ -18,7 +18,6 @@ class builder extends TweetBG_Controller {
             
             foreach ($sources->result() as $row) {              
                 $name = $row->screen_name;    
-                
                 $tweets = $this->db->query("SELECT * FROM user_tweets WHERE screen_name='$name'");
                 
                  foreach ($tweets->result() as $tweet) {
@@ -54,7 +53,7 @@ class builder extends TweetBG_Controller {
     function getTweets($name, $last_id, $json, $row, $last_keyword){
 
         foreach($json as $single){
-            
+            die($row->search);
             if($row['search'] = 'keyword') {
                 preg_match('/([a-zA-Z0-9_-]+)\*/', $single->text, $matches);
             
@@ -78,7 +77,7 @@ class builder extends TweetBG_Controller {
                         return;
                     }
                 }
-            } else if($row['string']) { //not a choice yet 
+            } else if($row->search == 'string') { //not a choice yet 
                    //remove prepositiongs
                    //a method that returns strong with no prepositions
                    $fullPath = $this->imagebuilder->build($row->source, $keyword);
