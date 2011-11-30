@@ -29,6 +29,11 @@
         }).send();
     });
     
+    document.getElement('.more').addEvent('click', function(event){
+        window.location = "about";
+        
+    });
+    
     document.getElement('form[name=options]').addEvent('submit', function(event){
         event.preventDefault();
         //document.getElement('.getSample').fireEvent('click');
