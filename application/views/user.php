@@ -26,6 +26,10 @@
     <form name="options" method="PUT" action="user">
         <div class="source">
             <h2>Choose your photo source.</h2>
+            <div class="alert-message block-message info">
+                <a class="fadeout close" href="#">×</a>
+                <p class="source-description"><strong>Recommended!</strong><br> 500px is a photographic community powered by creative people from all over the world that lets you share and discover inspiring photographs.</p>
+            </div>
             <ul class="unstyled">
                 <li><input name="source" type="radio" value="500px" <?= $source == '500px' ? "checked" : "" ?>>500px</li>
                 <li><input name="source" type="radio" value="Flickr" <?= $source == 'Flickr' ? "checked" : "" ?>>Flickr</li>
@@ -35,14 +39,18 @@
         
         <div class="search">
             <h2>Choose your search type.</h2>
+            <div class="alert-message block-message info">
+                <a class="fadeout close" href="#">×</a>
+                <p class="search-description"><strong>Keyword</strong><br> searches your latest tweet for words containing an asterix(*) and creates a collage of photos based on search results using that word.</p>
+            </div>
             <ul class="unstyled">
                 <li><input name="search" type="radio" value="keyword" <?= $search == 'keyword' ? "checked" : "" ?>>Keyword</li>
-                <li><input name="search" type="radio" disabled="true" value="string" <?= $search == 'string' ? "checked" : "" ?>>String</li>
+                <li><input name="search" type="radio" disabled="true" value="string" <?= $search == 'string' ? "checked" : "" ?>>String (coming soon)</li>
             </ul>
         </div>
       
         <div class="sample">
-            <input name="term" class="xlarge" placeholder="a word to search with">           
+            <input name="term" class="xlarge" placeholder="coffee">           
             <div class="sample-image"></div>
         </div>
     

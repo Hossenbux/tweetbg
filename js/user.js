@@ -29,6 +29,11 @@
         }).send();
     });
     
+    document.getElement('.more').addEvent('click', function(event){
+        window.location = "about";
+        
+    });
+    
     document.getElement('form[name=options]').addEvent('submit', function(event){
         event.preventDefault();
         //document.getElement('.getSample').fireEvent('click');
@@ -47,10 +52,33 @@
         }).send();
     })
     
-
     document.getElements('.fadeout').addEvent('click', function(event){
         event.preventDefault();
-        this.getParent('.alert-message').nix('true');
+        this.getParent('.alert-message').dissolve();
     });
+    
+    document.getElement('ul').addEvent('click:relay([type=radio])', function(event){
+        source = document.getElement('.source-description');
+        search = document.getElement('.search-description');
+        document.getElement('.'+this.name+'-description').reveal();
+        
+        switch(this.value){
+            case '500px':
+                source.set('html', '<strong>Recommended!</strong><br> 500px is a photographic community powered by creative people from all over the world that lets you share and discover inspiring photographs and most definitely has the highest quality collection of photos.')
+                break;
+            case 'Flickr':
+                source.set('html', '<strong>Sure!</strong><br> Flickr is a popular image hosting site that has a massive community of users. We recommended this service for more generic photos and good with string search.')
+                break;
+            case 'Google':
+                source.set('html', '<strong>Okay!</strong><br> Google has a collection of almost every photo on the internet which also means a lot of junk. Works best with string search.')
+                break;
+           case 'Keyword':
+                search.set('html', '<strong>Keyword</strong><br> searches your latest tweet for words containing an asterix(*) and creates a collage of photos based on search results from your chosen source using that word.')
+                break;
+           case 'String':
+                search.set('html', '<strong>String</strong><br> gets your latest tweet and creates a collage of photos based on search results from your chosen source using that word.')
+                break;
+        }
+    })
 
 });
