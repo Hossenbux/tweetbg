@@ -29,6 +29,7 @@ class builder extends TweetBG_Controller {
                     $last_id = $tweet->last_id;
                     
                     try {
+                        echo 'here';
                         $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
                         $json = json_decode($oauth->getLastResponse()); 
                         $this->getTweets($name, $last_id, $json, $row, $tweet->last_keyword);
