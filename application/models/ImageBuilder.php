@@ -94,7 +94,7 @@ class ImageBuilder extends CI_Model
         $count = 0;
         $images = array();
         $url = "https://ajax.googleapis.com/ajax/services/search/images?" .
-           "v=1.0&q=$keyword&as_filetype=jpg&rsz=8";
+           "v=1.0&q=$keyword&as_filetype=jpg&rsz=8&imgsz=small";
         do {
             // sendRequest
             // note how referer is set manually
