@@ -70,7 +70,7 @@ class builder extends TweetBG_Controller {
                         
                         //unlink($fullPath);
                         if($code == 200) {
-                            $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id WHERE screen_name='$name'");
+                            $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id_str WHERE screen_name='$name'");
                             //unlink("$fullPath");   
                                           
                         }
