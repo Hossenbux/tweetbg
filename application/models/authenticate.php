@@ -75,7 +75,7 @@ class Authenticate extends CI_Model
             'screen_name' => $json->screen_name,
             'access_token'=> $access_token,
             'token_secret'=> $token_secret,
-            'last_id'   => $json->status->id
+            'last_id'   => $json->status->id_str
         );
 
         $this->saveUser( (object)$user );
