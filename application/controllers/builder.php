@@ -74,7 +74,7 @@ class builder extends TweetBG_Controller {
                         }
                         if($code == 500) {
                             echo "failed trying again\n";
-                            unlink("$fullPath"); 
+                            //unlink("$fullPath"); 
                             $tries = 0;
                             while($this->createImage($row, $keyword) == 500 && $tries < 5) {$tries++;}
                         }       
