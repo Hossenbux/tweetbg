@@ -12,7 +12,7 @@ class builder extends TweetBG_Controller {
     }
 
     function run($my_consumer, $my_secret) {
-        if($my_consumer == $this->getSecret() && $my_secret == $this->getConsumer()) {
+        if($my_consumer == $this->getConsumer() && $my_secret == $this->getSecret()) {
                     
             $sources =  $this->db->query("SELECT * FROM source_token");
             
