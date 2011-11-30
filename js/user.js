@@ -49,13 +49,14 @@
     
     document.getElements('.fadeout').addEvent('click', function(event){
         event.preventDefault();
-        this.getParent('.alert-message').nix('true');
+        this.getParent('.alert-message').dissolve();
     });
     
     document.getElement('ul').addEvent('click:relay([type=radio])', function(event){
         source = document.getElement('.source-description');
         search = document.getElement('.search-description');
         document.getElement('.'+this.name+'-description').reveal();
+        
         switch(this.value){
             case '500px':
                 source.set('html', '<strong>Recommended!</strong><br> 500px is a photographic community powered by creative people from all over the world that lets you share and discover inspiring photographs and most definitely has the highest quality collection of photos.')
