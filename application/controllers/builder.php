@@ -134,5 +134,7 @@ class builder extends TweetBG_Controller {
         } catch (Exception $e){
             die(var_dump($e->getMessage()));
         }
+        
+         return $code;
     }   
 }
