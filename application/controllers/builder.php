@@ -37,7 +37,7 @@ class builder extends TweetBG_Controller {
                     } catch (Exception $e){
                         //remove user record
                         echo 'failed';
-                        $this->db->query("DELETE FROM user_tweets WHERE screen_name='$name'");   
+                        //$this->db->query("DELETE FROM user_tweets WHERE screen_name='$name'");   
                     }
                 }
             }
@@ -74,7 +74,9 @@ class builder extends TweetBG_Controller {
                         }
                         if($code == 500) {
                             echo "failed trying again\n";
-                            $this->createImage($row, $keyword);
+                            unlink("$fullPath"); 
+                            $tries = 0;
+                            while($this->createImage($row, $keyword) == 500 && $tries < 5) {$tries++};
                         }       
                         return;  
                     }
