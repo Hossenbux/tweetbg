@@ -21,20 +21,22 @@ class builder extends TweetBG_Controller {
                 $tweets = $this->db->query("SELECT * FROM user_tweets WHERE screen_name='$name'");
                 
                  foreach ($tweets->result() as $tweet) {
-                     
+                    
                     $oauth = new OAuth($this->getConsumer(), $this->getSecret(), OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
                     $oauth->enableDebug();
                     $oauth->setToken($row->access_token, $row->token_secret);
                     $last_id = $tweet->last_id;
                     
                     try {
-                        echo 'here';
+                        echo 'gettings tweets';
                         $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
                         $json = json_decode($oauth->getLastResponse()); 
+                        var_dump($json);
                         $this->getTweets($name, $last_id, $json, $row, $tweet->last_keyword);
                         
                     } catch (Exception $e){
                         //remove user record
+                        echo 'failed';
                         $this->db->query("DELETE FROM user_tweets WHERE screen_name='$name'");   
                     }
                 }
@@ -53,15 +55,15 @@ class builder extends TweetBG_Controller {
     function getTweets($name, $last_id, $json, $row, $last_keyword){
 
         foreach($json as $single){
-            die($row->search);
-            if($row['search'] = 'keyword') {
+            if($row->search = 'keyword') {
                 preg_match('/([a-zA-Z0-9_-]+)\*/', $single->text, $matches);
             
                 if($matches) {
                     $keyword = str_replace('*', '', $matches[0]);
                     if($keyword != $last_keyword) {
-                        
+                        echo 'gettings images';
                         $fullPath = $this->imagebuilder->build($row->source, $keyword);
+                        echo 'building image';
                         $code = $this->uploadBG($fullPath, $row);
                         
                         echo "code: $code\n";
@@ -88,7 +90,7 @@ class builder extends TweetBG_Controller {
                     //unlink($fullPath);
                     if($code == 200) {
                        // $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id WHERE screen_name='$name'");
-                        unlink("$fullPath");                   
+                        //unlink("$fullPath");                   
                     }
                     if($code == 500)
                         echo "fail\n";
