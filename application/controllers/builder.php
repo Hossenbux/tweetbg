@@ -43,26 +43,6 @@ class builder extends TweetBG_Controller {
             $this->output->set_status_header('401');
         }
     }
-
-
-	/*
-	 * Finds a keyword in recent tweets, should be Builder(twitter?) model
-	 */
-	function getKeyword($name, $last_id, $tweets, $row, $last_keyword)
-	{
-		$i = 0;
-		while(!($match = $this->matchStyle($tweets[$i]->text, ))) {$i++;} // Finds a tweet with star or the first one with combination of words
-		
-		if(count($match) > 0)
-		{
-			$tweet  = $tweets[$i];
-			echo "do somehting with ". $match[1]; 
-			// Generate and upload pic
-
-			print_r($tweet);
-			// Update last_id with $tweet->id
-		}
-	}
     
     function sample($source, $keyword){
         $img = $this->imagebuilder->build($source, $keyword);
@@ -88,7 +68,7 @@ class builder extends TweetBG_Controller {
                         
                         //unlink($fullPath);
                         if($code == 200) {
-                           // $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id WHERE screen_name='$name'");
+                            $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id WHERE screen_name='$name'");
                             unlink("$fullPath");                   
                         }
                         if($code == 500)
