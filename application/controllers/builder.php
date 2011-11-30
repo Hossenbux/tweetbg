@@ -62,10 +62,8 @@ class builder extends TweetBG_Controller {
                     $keyword = str_replace('*', '', $matches[0]);
                     if($keyword != $last_keyword) {
                         echo 'gettings images';
-                        $fullPath = $this->imagebuilder->build($row->source, $keyword);
-                        echo 'building image';
-                        $code = $this->uploadBG($fullPath, $row);
                         
+                        $code = $this->createImage($row, $keyword);
                         echo "code: $code\n";
                         
                         //unlink($fullPath);
@@ -74,9 +72,10 @@ class builder extends TweetBG_Controller {
                             //unlink("$fullPath");   
                                           
                         }
-                        if($code == 500)
-                            echo "fail\n";
-                                
+                        if($code == 500) {
+                            echo "failed trying again\n";
+                            $this->createImage($row, $keyword);
+                        }       
                         return;  
                     }
                 }
@@ -100,6 +99,12 @@ class builder extends TweetBG_Controller {
                    
             }
         }
+    }
+
+    function createImage($row, $keyword){
+        $fullPath = $this->imagebuilder->build($row->source, $keyword);
+        echo 'building image';
+        return $this->uploadBG($fullPath, $row);
     }
 
     function uploadBG($fullPath, $row){
