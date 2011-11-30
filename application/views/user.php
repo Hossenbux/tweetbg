@@ -13,7 +13,7 @@
    
     <div class="alert-message block-message error fade in" data-alert="alert">
         <a class="fadeout close" href="#">×</a>
-        <p><strong>Oh hai der!</strong> Thank you for using our application. We are currently developing the app further to me more dynamic and customizable. Your background will be updated approximately every 5 minutes. Enjoy!.</p>
+        <p><strong>Oh hai der!</strong> Thank you for using our application. We are currently developing the app further to be more dynamic and customizable. Your background will be updated approximately every 5 minutes. Enjoy!.</p>
         <div class="alert-actions">
           <button class="btn small more">Learn more</button> <button class="btn small fadeout">Close</button>
         </div>
