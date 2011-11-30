@@ -1,10 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class builder extends TweetBG_Controller {
-        
-    protected $conskey = '';
-    protected $conssec = '';
-    
+
     function __construct() {
         parent::__construct();
         
@@ -12,14 +9,14 @@ class builder extends TweetBG_Controller {
         $this->load->database();
         $this->load->model('imagebuilder');
         $this->load->model('authenticate');
-        
-        $keys = $this->db->query("SELECT * FROM consumer WHERE source='tweetbg'")->result();
-        $this->conskey = $keys[0]->consumer_key;
-        $this->conssec =  $keys[0]->consumer_secret;
+    }
+    
+    public function index() {
+        $this->output->set_status_header('401');
     }
 
     function cron($my_consumer, $my_secret) {
-        if($my_consumer == $this->conskey && $my_secret == $this->conssec) {
+        if($my_consumer == $this->getSecret() && $my_secret == $this->getConsumer()) {
                  
             $sources =  $this->db->query("SELECT * FROM source_token");
             
@@ -31,7 +28,7 @@ class builder extends TweetBG_Controller {
                 $tweets = $this->db->query("SELECT * FROM user_tweets WHERE screen_name='$name'");
                 
                  foreach ($tweets->result() as $tweet) {
-                    $oauth = new OAuth($this->conskey, $this->conssec, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
+                    $oauth = new OAuth($this->getConsumer(), $this->getSecret(), OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
                     $oauth->enableDebug();
                     $oauth->setToken($row->access_token, $row->token_secret);
                     $last_id = $tweet->last_id;
@@ -39,7 +36,7 @@ class builder extends TweetBG_Controller {
                     try {
                         $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
                         $json = json_decode($oauth->getLastResponse()); 
-                        $this->getKeyword($name, $last_id, $json, $row, $tweet->last_keyword, $this->conskey, $this->conssec);
+                        $this->getKeyword($name, $last_id, $json, $row, $tweet->last_keyword);
                     	
                     } catch (Exception $e){
                         //remove user record
@@ -56,7 +53,7 @@ class builder extends TweetBG_Controller {
 	/*
 	 * Finds a keyword in recent tweets, should be Builder(twitter?) model
 	 */
-	function getKeyword($name, $last_id, $tweets, $row, $last_keyword, $conskey, $conssec)
+	function getKeyword($name, $last_id, $tweets, $row, $last_keyword)
 	{
 		$i = 0;
 		while(!($match = $this->matchStyle($tweets[$i]->text, '*'))) {$i++;} // Finds a tweet with star or the first one with combination of words
@@ -80,46 +77,6 @@ class builder extends TweetBG_Controller {
 		preg_match('/([a-zA-Z0-9_-]+)\*/', $str, $matches);
 		return $matches;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-    function run() {        
-        $sources =  $this->db->query("SELECT * FROM source_token");
-        
-        foreach ($sources->result() as $row)
-        {
-           
-            $name = $row->screen_name;    
-            
-            $tweets = $this->db->query("SELECT * FROM user_tweets WHERE screen_name='$name'");
-            
-             foreach ($tweets->result() as $tweet) {
-                $oauth = new OAuth($this->conskey, $this->conssec, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
-                $oauth->enableDebug();
-                $oauth->setToken($row->access_token, $row->token_secret);
-                $last_id = $tweet->last_id;
-                
-                try {
-                    $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
-                    $json = json_decode($oauth->getLastResponse()); 
-                    $this->getTweets($name, $last_id, $json, $row, $tweet->last_keyword, $this->conskey, $this->conssec);
-                	
-                } catch (Exception $e){
-                    //remove user record
-                    $this->db->query("DELETE FROM user_tweets WHERE screen_name='$name'");   
-                }
-            }
-        }
-       
-    }
-
 
     
     function sample($source, $keyword){
@@ -128,7 +85,7 @@ class builder extends TweetBG_Controller {
         //unlink("$img");   
     }
 	
-    function getTweets($name, $last_id, $json, $row, $last_keyword, $conskey, $conssec){
+    function getTweets($name, $last_id, $json, $row, $last_keyword){
                 echo "tweet";
         foreach($json as $single){
             preg_match('/([a-zA-Z0-9_-]+)\*/', $single->text, $matches);
@@ -143,8 +100,8 @@ class builder extends TweetBG_Controller {
                     $fullPath = $this->imagebuilder->build($row->source, $keyword);
                     
                     $tmhOAuth = new tmhOAuth(array(
-                        'consumer_key'    => $conskey,
-                        'consumer_secret' => $conssec,
+                        'consumer_key'    => $this->getConsumer(),
+                        'consumer_secret' => $this->getSecret(),
                         'user_token'      => $row->access_token,
                         'user_secret'     => $row->token_secret,
                     ));
@@ -183,10 +140,6 @@ class builder extends TweetBG_Controller {
                     }
                     if($code == 500)
                         echo "fail\n";
-                    // if ($code == 200) {
-                         // tmhUtilities::pr(json_decode($tmhOAuth->response['response']));
-                    // }
-                    // tmhUtilities::pr(htmlentities($tmhOAuth->response['response']));
                             
                     return;
                 }
