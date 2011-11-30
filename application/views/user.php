@@ -13,7 +13,7 @@
    
     <div class="alert-message block-message error fade in" data-alert="alert">
         <a class="fadeout close" href="#">×</a>
-        <p><strong>Oh hai der!</strong> Thank you for using our application. We are currently developing the app further to me more dynamic and customizable. Feel free to checkout our list of features by clicking the button below.</p>
+        <p><strong>Oh hai der!</strong> Thank you for using our application. We are currently developing the app further to me more dynamic and customizable. Your background will be updated approximately every 5 minutes. Enjoy!.</p>
         <div class="alert-actions">
           <button class="btn small more">Learn more</button> <button class="btn small fadeout">Close</button>
         </div>
@@ -41,7 +41,7 @@
             <h2>Choose your search type.</h2>
             <div class="alert-message block-message info">
                 <a class="fadeout close" href="#">×</a>
-                <p class="search-description"><strong>Keyword</strong><br> searches your latest tweet for words containing an asterix(*) and creates a collage of photos based on search results using that word.</p>
+                <p class="search-description"><strong>Keyword</strong><br> searches your latest tweet for words containing an asterix(*) at the end and creates a collage of photos based on search results using that word.</p>
             </div>
             <ul class="unstyled">
                 <li><input name="search" type="radio" value="keyword" <?= $search == 'keyword' ? "checked" : "" ?>>Keyword</li>
