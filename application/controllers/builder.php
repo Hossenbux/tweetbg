@@ -64,23 +64,21 @@ class builder extends TweetBG_Controller {
                 if($matches) {
                     $keyword = str_replace('*', '', $matches[0]);
                     if($keyword != $last_keyword) {
-                        echo 'gettings images';
+                        echo "gettings images\n";
                         
+                        $tries = 0;
+                        while($this->createImage($row, $keyword) == 500 && $tries < 5) {
+                            $tries++;
+                             echo "failed trying again\n";
+                             echo "code: $code\n";
+                            
+                        }
                         $code = $this->createImage($row, $keyword);
-                        echo "code: $code\n";
-                        
-                        //unlink($fullPath);
+
                         if($code == 200) {
                             $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id_str WHERE screen_name='$name'");
-                            //unlink("$fullPath");   
-                                          
-                        }
-                        if($code == 500) {
-                            echo "failed trying again\n";
-                            //unlink("$fullPath"); 
-                            $tries = 0;
-                            while($this->createImage($row, $keyword) == 500 && $tries < 5) {$tries++;}
-                        }       
+                            //unlink("$fullPath");                                             
+                        }   
                         return;  
                     }
                 }
