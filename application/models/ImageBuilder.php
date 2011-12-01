@@ -8,14 +8,12 @@ class ImageBuilder extends CI_Model
     }
     
     function build($source, $keyword) {
-        $j_l =3;
-        $i_l =3;
+        $j_l =5;
+        $i_l =5;
         $source = "pic".$source;
         $images = $this->{$source}($keyword);
         
         $new_image = imagecreatetruecolor(140*$i_l, 140*$j_l);
-        $max = count($images);
-        $tries = 0;
         for ($i = 0; $i < $i_l; $i++)
         {
             for ($j = 0; $j < $j_l; $j++)
@@ -23,15 +21,11 @@ class ImageBuilder extends CI_Model
                 $img = null;
                 $rand = rand(0, count($images)-1);
                 if( isset($images[$rand]) && $img = imagecreatefromjpeg($images[$rand]) ){
-                    unset($images[$rand]);
                     imagecopyresampled($new_image, $img, ($i)*140, ($j)*140, 0, 0, 140, 140, 140, 140);                    
-                } else if (isset($images[$rand]) ) {                  
+                } else {                  
                     $j--;
-                    unset($images[$rand]);
-                } else if ($tries <= $max){
-                    $j--;
-                }  
-                $tries++;            
+                } 
+                          
             }
         }
     
