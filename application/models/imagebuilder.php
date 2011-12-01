@@ -4,6 +4,7 @@ class ImageBuilder extends CI_Model
 {
     function __construct() {
         parent::__construct();
+        error_reporting (0);
     }
     
     function build($source, $keyword) {
@@ -18,13 +19,16 @@ class ImageBuilder extends CI_Model
             for ($j = 0; $j < $j_l; $j++)
             {
                 $img = null;
-                try {
-                    $img = imagecreatefromjpeg($images[rand(0, count($images)-1)]);
-                } catch (Exception $e){
+                $rand = rand(0, count($images)-1);
+                if( isset($images[$rand]) && $img = imagecreatefromjpeg($images[$rand]) ){
+                    unset($images[$rand]);
+                    imagecopyresampled($new_image, $img, ($i)*140, ($j)*140, 0, 0, 140, 140, 140, 140);                    
+                } else if (isset($images[$rand]) ) {                  
                     $j--;
-                }
-                 
-                imagecopyresampled($new_image, $img, ($i)*140, ($j)*140, 0, 0, 140, 140, 140, 140);
+                    unset($images[$rand]);
+                } else {
+                    $j--;
+                }              
             }
         }
     
@@ -109,7 +113,7 @@ class ImageBuilder extends CI_Model
             $json = json_decode($body);
     
             foreach($json->responseData->results as $photo)
-            {            
+            {   
                 array_push($images, $photo->url);
             }
             $count += 8;

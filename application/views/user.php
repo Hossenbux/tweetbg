@@ -61,6 +61,7 @@
             <div class="right">
                 <button class="btn large save" value="Save">Save</button>
                 <button class="btn large logout" value="logout">Logout</button>
+                <button class="btn large danger revoke" value="revoke">Delete</button>
             </div>
         </div>
     </form>

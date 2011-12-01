@@ -13,8 +13,8 @@ class User extends TweetBG_Controller {
         $this->load->database();
         
         $screen_name = $this->session->userdata('screen_name');
-        $this->user = $this->db->query("SELECT * FROM source_token WHERE screen_name='$screen_name'")->result();
-        $this->user = $this->user[0];
+        $this->user = $this->db->query("SELECT * FROM source_token WHERE screen_name='$screen_name'")->row();
+        $this->user = $this->user;
       
     }
 
@@ -28,7 +28,7 @@ class User extends TweetBG_Controller {
         );
         
         $this->template->set_template($platform);
-                $this->template->add_js('js/user.js');
+        $this->template->add_js('js/user.js');
         $this->template->parse_view('header', 'header', $data);
         $this->template->parse_view('content', 'user', $data);  
         $this->template->parse_view('footer', 'footer', $data);             
@@ -46,6 +46,12 @@ class User extends TweetBG_Controller {
     }
     
     public function logout(){
+        $this->session->set_userdata('state', '2');
+    }
+    
+    public function delete(){
+        $screen_name = $this->session->userdata('screen_name');
+        $this->db->query("UPDATE source_token SET authenticated='revoked' WHERE screen_name='$screen_name'");
         $this->session->sess_destroy();
     }
 }

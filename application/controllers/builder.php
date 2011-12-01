@@ -14,7 +14,7 @@ class builder extends TweetBG_Controller {
     function run($my_consumer, $my_secret) {
         if($my_consumer == $this->getConsumer() && $my_secret == $this->getSecret()) {
                     
-            $sources =  $this->db->query("SELECT * FROM source_token");
+            $sources =  $this->db->query("SELECT * FROM source_token WHERE authenticated NOT IN('reauthenticate', 'revoked')");
             
             foreach ($sources->result() as $row) {              
                 $name = $row->screen_name;    
@@ -31,13 +31,16 @@ class builder extends TweetBG_Controller {
                         echo 'gettings tweets';
                         $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
                         $json = json_decode($oauth->getLastResponse()); 
+                        
                         var_dump($json);
-                        $this->getTweets($name, $last_id, $json, $row, $tweet->last_keyword);
+                        if(count($json)) {
+                            $this->getTweets($name, $last_id, $json, $row, $tweet->last_keyword);
+                        }
                         
                     } catch (Exception $e){
-                        //remove user record
-                        echo 'failed';
-                        //$this->db->query("DELETE FROM user_tweets WHERE screen_name='$name'");   
+                        echo var_dump($e->getCode());
+                        if($e->getCode() == '401')
+                            $this->db->query("UPDATE source_token SET authenticated='reauthenticate' WHERE screen_name='$name'");   
                     }
                 }
             }
@@ -61,23 +64,21 @@ class builder extends TweetBG_Controller {
                 if($matches) {
                     $keyword = str_replace('*', '', $matches[0]);
                     if($keyword != $last_keyword) {
-                        echo 'gettings images';
+                        echo "gettings images\n";
                         
+                        $tries = 0;
+                        while($this->createImage($row, $keyword) == 500 && $tries < 5) {
+                            $tries++;
+                             echo "failed trying again\n";
+                             echo "code: $code\n";
+                            
+                        }
                         $code = $this->createImage($row, $keyword);
-                        echo "code: $code\n";
-                        
-                        //unlink($fullPath);
+
                         if($code == 200) {
                             $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id_str WHERE screen_name='$name'");
-                            //unlink("$fullPath");   
-                                          
-                        }
-                        if($code == 500) {
-                            echo "failed trying again\n";
-                            //unlink("$fullPath"); 
-                            $tries = 0;
-                            while($this->createImage($row, $keyword) == 500 && $tries < 5) {$tries++;}
-                        }       
+                            //unlink("$fullPath");                                             
+                        }   
                         return;  
                     }
                 }
