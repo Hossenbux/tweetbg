@@ -54,6 +54,10 @@ class builder extends TweetBG_Controller {
         echo $img;
         //unlink("$img");   
     }
+    
+    function removeSample($path, $img) {
+        unlink("$path/$img");
+    }
 	
     function getTweets($name, $last_id, $json, $row, $last_keyword){
 

@@ -14,7 +14,11 @@
             },
             'onSuccess': function(img) {                
                 sample.removeClass('loading')
-                sample.adopt(new Element('img', { src: '/'+img, 'class': 'sample-img'}))
+                sample.adopt(new Element('img', { src: '/'+img, 'class': 'sample-img'}));
+                new Request({
+                    'url': 'builder/removeSample/'+img,
+                    'method': 'POST'
+                }).send();
             }
         }).send();
     });
