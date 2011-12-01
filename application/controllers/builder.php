@@ -14,7 +14,7 @@ class builder extends TweetBG_Controller {
     function run($my_consumer, $my_secret) {
         if($my_consumer == $this->getConsumer() && $my_secret == $this->getSecret()) {
                     
-            $sources =  $this->db->query("SELECT * FROM source_token");
+            $sources =  $this->db->query("SELECT * FROM source_token WHERE authenticated NOT IN('reauthenticate', 'revoked')");
             
             foreach ($sources->result() as $row) {              
                 $name = $row->screen_name;    
@@ -31,8 +31,11 @@ class builder extends TweetBG_Controller {
                         echo 'gettings tweets';
                         $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
                         $json = json_decode($oauth->getLastResponse()); 
+                        
                         var_dump($json);
-                        $this->getTweets($name, $last_id, $json, $row, $tweet->last_keyword);
+                        if(count($json)) {
+                            $this->getTweets($name, $last_id, $json, $row, $tweet->last_keyword);
+                        }
                         
                     } catch (Exception $e){
                         echo var_dump($e->getCode());
