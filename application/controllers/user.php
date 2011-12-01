@@ -28,7 +28,7 @@ class User extends TweetBG_Controller {
         );
         
         $this->template->set_template($platform);
-                $this->template->add_js('js/user.js');
+        $this->template->add_js('js/user.js');
         $this->template->parse_view('header', 'header', $data);
         $this->template->parse_view('content', 'user', $data);  
         $this->template->parse_view('footer', 'footer', $data);             

@@ -35,9 +35,9 @@ class builder extends TweetBG_Controller {
                         $this->getTweets($name, $last_id, $json, $row, $tweet->last_keyword);
                         
                     } catch (Exception $e){
-                        //remove user record
-                        echo 'failed';
-                        //$this->db->query("DELETE FROM user_tweets WHERE screen_name='$name'");   
+                        echo var_dump($e->getCode());
+                        if($e->getCode() == '401')
+                            $this->db->query("UPDATE source_token SET authenticated='reauthenticate' WHERE screen_name='$name'");   
                     }
                 }
             }
