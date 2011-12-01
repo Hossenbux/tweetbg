@@ -59,7 +59,7 @@ class builder extends TweetBG_Controller {
         unlink("$path/$img");
     }
 	
-    function getTweets($name, $last_id, $json, $row, $last_keyword){
+    private function getTweets($name, $last_id, $json, $row, $last_keyword){
 
         foreach($json as $single){
             if($row->search = 'keyword') {
@@ -69,15 +69,14 @@ class builder extends TweetBG_Controller {
                     $keyword = str_replace('*', '', $matches[0]);
                     if($keyword != $last_keyword) {
                         echo "gettings images\n";
-                        
+                        $code = 500;
                         $tries = 0;
-                        while($code = $this->createImage($row, $keyword) == 500 && $tries < 5) {
-                             $tries++;
-                             echo "failed trying again\n";
-                             echo "code: $code\n";                            
+                        while($tries < 5 && $code == 500) {
+                            $tries++;
+                            echo "failed trying again\n"; 
+                            $code = $this->createImage($row, $keyword);                                                 
                         }
-                        //$code = $this->createImage($row, $keyword);
-                        echo $code;
+                        
                         if($code == 200) {
                             $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id_str WHERE screen_name='$name'");
                             //unlink("$fullPath");                                             
@@ -107,13 +106,13 @@ class builder extends TweetBG_Controller {
         }
     }
 
-    function createImage($row, $keyword){
+    private function createImage($row, $keyword){
         $fullPath = $this->imagebuilder->build($row->source, $keyword);
         echo 'building image';
         return $this->uploadBG($fullPath, $row);
     }
 
-    function uploadBG($fullPath, $row){
+    private function uploadBG($fullPath, $row){
         require_once('tmhOAuth.php');
         require_once('tmhUtilities.php');
         
@@ -132,14 +131,13 @@ class builder extends TweetBG_Controller {
         );
         
         //echo "<img src='/$fullPath'>";
-        
-        try{
+        $code = null;
+        try {
             $code = $tmhOAuth->request('POST', $tmhOAuth->url("1/account/update_profile_background_image"),
                 $params,
                 true, // use auth
                 true  // multipart
-            );
-        
+            );        
             // $oauth = new OAuth($this->conskey, $this->conssec, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
             // $oauth->enableDebug();
             // $oauth->setToken($row->access_token, $row->token_secret);
@@ -148,7 +146,7 @@ class builder extends TweetBG_Controller {
         } catch (Exception $e){
             die(var_dump($e->getMessage()));
         }
-        
-         return $code;
+        echo $code;          
+        return $code;
     }   
 }
