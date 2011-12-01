@@ -6,9 +6,9 @@ class TweetBG_Controller extends CI_Controller {
         parent::__construct();
         $this->load->database();
         
-        $keys = $this->db->query("SELECT * FROM consumer WHERE source='tweetbg'")->result();
-        $this->conskey = $keys[0]->consumer_key;
-        $this->conssec =  $keys[0]->consumer_secret;
+        $keys = $this->db->query("SELECT * FROM consumer WHERE source='tweetbg'")->row();
+        $this->conskey = $keys->consumer_key;
+        $this->conssec =  $keys->consumer_secret;
     }
     
     protected function getConsumer(){

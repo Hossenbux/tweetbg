@@ -6,7 +6,7 @@ class Home extends TweetBG_Controller {
         parent::__construct();
         $this->load->library('Template');
         $this->load->library('session');
-        if($this->session->userdata('screen_name'))
+        if($this->session->userdata('state') == 3)
             header('Location: user');
     }
 
@@ -14,7 +14,7 @@ class Home extends TweetBG_Controller {
         
         $platform = 'default';   
         $data = array(
-            'title'  => 'hai'
+            'title'  => 'home'
         );
         
         $this->template->set_template($platform);

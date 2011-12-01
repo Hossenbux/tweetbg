@@ -15,10 +15,10 @@ class Authenticate extends CI_Model
         
         $this->load->database();
         
-        $keys = $this->db->query("SELECT * FROM consumer")->result();
+        $keys = $this->db->query("SELECT * FROM consumer")->row();
 
-        $this->conskey = $keys[0]->consumer_key;
-        $this->conssec = $keys[0]->consumer_secret;
+        $this->conskey = $keys->consumer_key;
+        $this->conssec = $keys->consumer_secret;
     }
     
     private function getOAuth(){
@@ -52,7 +52,7 @@ class Authenticate extends CI_Model
     public function getAccess($oauth_token, $oauth_token_secret, $oauth_verifier){
         $oauth = $this->getOAuth();     
         $oauth->setToken($oauth_token, $oauth_token_secret);
-        $this->session->set_userdata('state', 0);
+        $this->session->set_userdata('state', 3);
         $access_token_info = $oauth->getAccessToken($this->acc_url, null, $oauth_verifier);
         $this->getSource($access_token_info['oauth_token'], $access_token_info['oauth_token_secret']);   
     }

@@ -19,10 +19,21 @@
         }).send();
     });
     
-     document.getElement('.logout').addEvent('click', function(event){
+    document.getElement('.logout').addEvent('click', function(event){
         new Request({
             'url': 'user/logout',
             'method': 'GET',
+            'onSuccess': function(response) {
+                window.location = "home";
+            }
+        }).send();
+    });
+    
+    document.getElement('.revoke').addEvent('click', function(event){
+        event.preventDefault();
+        new Request({
+            'url': 'user/delete',
+            'method': 'POST',
             'onSuccess': function(response) {
                 window.location = "home";
             }

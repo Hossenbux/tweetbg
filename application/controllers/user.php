@@ -46,6 +46,12 @@ class User extends TweetBG_Controller {
     }
     
     public function logout(){
+        $this->session->set_userdata('state', '2');
+    }
+    
+    public function delete(){
+        $screen_name = $this->session->userdata('screen_name');
+        $this->db->query("DELETE from source_token where screen_name='$screen_name'");
         $this->session->sess_destroy();
     }
 }
