@@ -71,14 +71,13 @@ class builder extends TweetBG_Controller {
                         echo "gettings images\n";
                         
                         $tries = 0;
-                        while($this->createImage($row, $keyword) == 500 && $tries < 5) {
-                            $tries++;
+                        while($code = $this->createImage($row, $keyword) == 500 && $tries < 5) {
+                             $tries++;
                              echo "failed trying again\n";
-                             echo "code: $code\n";
-                            
+                             echo "code: $code\n";                            
                         }
-                        $code = $this->createImage($row, $keyword);
-
+                        //$code = $this->createImage($row, $keyword);
+                        echo $code;
                         if($code == 200) {
                             $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id_str WHERE screen_name='$name'");
                             //unlink("$fullPath");                                             

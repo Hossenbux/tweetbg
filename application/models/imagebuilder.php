@@ -13,6 +13,9 @@ class ImageBuilder extends CI_Model
         $source = "pic".$source;
         $images = $this->{$source}($keyword);
         
+        $tries = 0;
+        $max = count($images);
+        
         $new_image = imagecreatetruecolor(140*$i_l, 140*$j_l);
         for ($i = 0; $i < $i_l; $i++)
         {
@@ -22,7 +25,8 @@ class ImageBuilder extends CI_Model
                 $rand = rand(0, count($images)-1);
                 if( isset($images[$rand]) && $img = imagecreatefromjpeg($images[$rand]) ){
                     imagecopyresampled($new_image, $img, ($i)*140, ($j)*140, 0, 0, 140, 140, 140, 140);                    
-                } else {                  
+                } else if($tries <= $max) {
+                    $tries++;                  
                     $j--;
                 } 
                           
@@ -71,6 +75,7 @@ class ImageBuilder extends CI_Model
             'extras' => 'url_s',
             'format' => 'json',
             'safe_search'=> '2',
+            'sort' => 'interestingness-desc',
             'nojsoncallback' => true,
         );
         try{
