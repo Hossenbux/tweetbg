@@ -14,6 +14,8 @@ class ImageBuilder extends CI_Model
         $images = $this->{$source}($keyword);
         
         $new_image = imagecreatetruecolor(140*$i_l, 140*$j_l);
+        $max = count($images);
+        $tries = 0;
         for ($i = 0; $i < $i_l; $i++)
         {
             for ($j = 0; $j < $j_l; $j++)
@@ -26,9 +28,10 @@ class ImageBuilder extends CI_Model
                 } else if (isset($images[$rand]) ) {                  
                     $j--;
                     unset($images[$rand]);
-                } else {
+                } else if ($tries <= $max){
                     $j--;
-                }              
+                }  
+                $tries++;            
             }
         }
     
