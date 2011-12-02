@@ -8,6 +8,7 @@ class builder extends TweetBG_Controller {
         $this->load->library('session');
         $this->load->database();
         $this->load->model('imagebuilder');
+        $this->load->model('twitter');
         $this->load->model('authenticate');
     }
 
@@ -84,24 +85,28 @@ class builder extends TweetBG_Controller {
                         return;  
                     }
                 }
+                
             } else if($row->search == 'string') { //not a choice yet 
-                   //remove prepositiongs
+                   //clean tweet                   
+                   $keword = $this->twitter->cleanTweet($single);
                    //a method that returns strong with no prepositions
-                   $fullPath = $this->imagebuilder->build($row->source, $keyword);
-                   $code = $this->uploadBG($fullPath, $row);
-                        
-                    echo "code: $code\n";
-                    
-                    //unlink($fullPath);
-                    if($code == 200) {
-                        $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id_str WHERE screen_name='$name'");
-                        //unlink("$fullPath");                   
-                    }
-                    if($code == 500)
-                        echo "fail\n";
-                            
-                    return;
-                   
+                   if($keyword != $last_keyword) {
+                       echo "gettings images\n";
+                       $code = 500;
+                       $tries = 0;
+                       while($tries < 5 && $code == 500) {
+                           $tries++;
+                           echo "failed trying again\n"; 
+                           $code = $this->createImage($row, $keyword);                                                 
+                       }
+                       
+                       if($code == 200) {
+                           $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id_str WHERE screen_name='$name'");
+                           //unlink("$fullPath");
+                          return;                                               
+                       }
+                       //else move on to next tweet;
+                   }
             }
         }
     }
