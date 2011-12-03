@@ -2,16 +2,37 @@
 
 class ImageBuilder extends CI_Model
 {
-    function __construct() {
+    function __construct() 
+    {
         parent::__construct();
         error_reporting (0);
     }
     
-    function build($source, $keyword) {
+    function build($source, $keyword) 
+    {
         $j_l =5;
         $i_l =5;
         $source = "pic".$source;
-        $images = $this->{$source}($keyword);
+        $images = array();
+        
+        if(is_array($keyword))
+        {
+            foreach ($keyword as $word) 
+            {
+                if(!count($images))
+                {
+                    $images = $this->{$source}($word);
+                }
+                else 
+                {
+                    array_merge($images, $this->{$source}($word));
+                }
+            }
+        }
+        else 
+        {
+            $images = $this->{$source}($keyword);
+        }
         
         $tries = 0;
         $max = count($images);
@@ -23,9 +44,12 @@ class ImageBuilder extends CI_Model
             {
                 $img = null;
                 $rand = rand(0, count($images)-1);
-                if( isset($images[$rand]) && $img = imagecreatefromjpeg($images[$rand]) ){
+                if( isset($images[$rand]) && $img = imagecreatefromjpeg($images[$rand]) )
+                {
                     imagecopyresampled($new_image, $img, ($i)*140, ($j)*140, 0, 0, 140, 140, 140, 140);                    
-                } else if($tries <= $max) {
+                } 
+                else if($tries <= $max) 
+                {
                     $tries++;                  
                     $j--;
                 } 
@@ -36,16 +60,21 @@ class ImageBuilder extends CI_Model
         $imgid = uniqid();
         $path = "imgs/$imgid.jpg";
         
-        try {
+        try 
+        {
             imagejpeg($new_image, $path);
-        } catch (Exception $e){
+        } 
+        catch (Exception $e)
+        {
+            //TODO: log message in log table
             die($e->getMessage());
         }
         
         return $path;
     }
     
-    function pic500px($keyword) {
+    function pic500px($keyword) 
+    {
         $oauth = new OAuth('xHkW9aeTnoYk4k1lUYicCjbKY9VXjYOWxE3OsBt8', 'SoxoUAwEOuV2lSQKLWRcj5Tm2LM4X1l4hMlr2Skc', OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
         $oauth->enableDebug();
         $oauth->fetch("https://api.500px.com/v1/photos/search?term=$keyword&rpp=100");
@@ -55,9 +84,12 @@ class ImageBuilder extends CI_Model
         $images = array();
         foreach($content->photos as $photo)
         {            
-            if ($photo->rating < 5) { 
+            if ($photo->rating < 5) 
+            { 
                 unset($content->photos[$c]);
-            } else {
+            } 
+            else 
+            {
                 array_push($images, $photo->image_url);
             }
             $c++;
@@ -66,7 +98,8 @@ class ImageBuilder extends CI_Model
         
     }
     
-     function picFlickr($keyword) {
+     function picFlickr($keyword) 
+     {
         $oauth = new OAuth('6b7cf68c49a2240ea83f077f8a4640eb', 'f71ccb2b1b52a473', OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
         $oauth->enableDebug();
         $params = array(
@@ -78,9 +111,13 @@ class ImageBuilder extends CI_Model
             'sort' => 'interestingness-desc',
             'nojsoncallback' => true,
         );
-        try{
+        try
+        {
             $oauth->fetch("http://api.flickr.com/services/rest/", $params, OAUTH_HTTP_METHOD_GET);
-        } catch (Exception $e){
+        } 
+        catch (Exception $e)
+        {
+            //TODO: log error in log table
             echo $e->getMessage();
             return;
         }
@@ -96,12 +133,14 @@ class ImageBuilder extends CI_Model
         
     }
      
-      function picGoogle($keyword) {
+      function picGoogle($keyword) 
+      {
         $count = 0;
         $images = array();
         $url = "https://ajax.googleapis.com/ajax/services/search/images?" .
            "v=1.0&q=$keyword&as_filetype=jpg&rsz=8&imgsz=medium";
-        do {
+        do 
+        {
             // sendRequest
             // note how referer is set manually
             $ch = curl_init();
@@ -118,9 +157,11 @@ class ImageBuilder extends CI_Model
             {   
                 array_push($images, $photo->url);
             }
+            
             $count += 8;
             $url = $url = "https://ajax.googleapis.com/ajax/services/search/images?" .
-                "v=1.0&q=$keyword&as_filetype=jpg&rsz=8&start=$count";                        
+                "v=1.0&q=$keyword&as_filetype=jpg&rsz=8&start=$count";  
+                                      
         } while($count < 20);
         
         return $images;

@@ -44,8 +44,9 @@
                 <p class="search-description"><strong>Keyword</strong><br> searches your latest tweet for words containing an asterix(*) at the end and creates a collage of photos based on search results using that word.</p>
             </div>
             <ul class="unstyled">
+                <li><input name="search" type="radio" value="string" <?= $search == 'string' ? "checked" : "" ?>>String</li>           
                 <li><input name="search" type="radio" value="keyword" <?= $search == 'keyword' ? "checked" : "" ?>>Keyword</li>
-                <li><input name="search" type="radio" disabled="true" value="string" <?= $search == 'string' ? "checked" : "" ?>>String (coming soon)</li>
+                <li><input name="search" type="radio" value="hashtag" <?= $search == 'hashtag' ? "checked" : "" ?>>Hashtag (coming soon)</li>               
             </ul>
         </div>
       
