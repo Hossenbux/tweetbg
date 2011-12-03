@@ -66,8 +66,7 @@ class builder extends TweetBG_Controller
     function sample($source, $keyword)
     {
         $img = $this->imagebuilder->build($source, $keyword);
-        echo $img;
-        //unlink("$img");   
+        echo $img; 
     }
     
     function removeSample($path, $img) 

@@ -1,9 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class User extends TweetBG_Controller {
+class User extends TweetBG_Controller 
+{
     protected $user;
     
-    function __construct() {
+    function __construct() 
+    {
         parent::__construct();
         
         $this->load->library('session');
@@ -18,13 +20,14 @@ class User extends TweetBG_Controller {
       
     }
 
-    public function index() {
+    public function index() 
+    {
         $platform = 'default';   
         $data = array(
             'screen_name'  => $this->user->screen_name,
             'avatar' => $this->session->userdata('avatar'),
             'source' => $this->user->source,
-            'search' => 'keyword'
+            'search' => $this->user->search
         );
         
         $this->template->set_template($platform);
@@ -35,21 +38,26 @@ class User extends TweetBG_Controller {
         $this->template->render();
     }
     
-    public function saveSettings($source, $search){ //cause I am too fucking lazy to generate my own identification protocol.
+    public function saveSettings($source, $search) //cause I am too fucking lazy to generate my own identification protocol.
+    { 
        $screen_name = $this->session->userdata('screen_name');
-       try{
+       try
+       {
             $this->db->query("UPDATE source_token SET source='$source', search='$search' WHERE screen_name='$screen_name'");
             echo '200';
        } catch (Exception $e){
+           //TODO: log error message
            echo $e->getMessage();
        }       
     }
     
-    public function logout(){
+    public function logout()
+    {
         $this->session->set_userdata('state', '2');
     }
     
-    public function delete(){
+    public function delete()
+    {
         $screen_name = $this->session->userdata('screen_name');
         $this->db->query("UPDATE source_token SET authenticated='revoked' WHERE screen_name='$screen_name'");
         $this->session->sess_destroy();
