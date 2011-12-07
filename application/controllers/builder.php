@@ -117,7 +117,7 @@ class builder extends TweetBG_Controller
                 $tweet =  $json[0];
                 //clean tweet                   
                 $keywords = $this->tweet->cleanTweet($tweet->text);                
-                
+                echo $tweet->text;
                 //a method that returns strong with no prepositions
                 echo "gettings images\n";
                 $code = 500;
