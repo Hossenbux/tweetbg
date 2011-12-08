@@ -39,7 +39,6 @@ class builder extends TweetBG_Controller
                     
                     try 
                     {
-                        echo 'gettings tweets';
                         $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
                         $json = json_decode($oauth->getLastResponse()); 
                         
@@ -91,15 +90,14 @@ class builder extends TweetBG_Controller
                         
                         if($keyword != $last_keyword) 
                         {
-                            echo "gettings images\n";
                             $code = 500;
                             $tries = 0;
                             
                             while($tries < 5 && $code == 500) 
                             {
                                 $tries++;
-                                echo "failed trying again\n"; 
-                                $code = $this->createImage($row, $keyword);                                                 
+                                $code = $this->createImage($row, $keyword); 
+                                echo $code;                                                
                             }
                             
                             if($code == 200) 
@@ -118,15 +116,13 @@ class builder extends TweetBG_Controller
                 $tweet =  $json[0];
                 //clean tweet                   
                 $keywords = $this->tweet->cleanTweet($tweet->text);                
-                echo $tweet->text;
+                print_r($keywords);
                 //a method that returns strong with no prepositions
-                echo "gettings images\n";
                 $code = 500;
                 $tries = 0;
                 do
                 {
                     $tries++;
-                    echo "failed trying again\n"; 
                     $code = $this->createImage($row, $keywords);                                                
                 }  while($tries < 5 && $code == 500);
                    
@@ -143,8 +139,7 @@ class builder extends TweetBG_Controller
     private function createImage($row, $keyword)
     {
         $fullPath = $this->imagebuilder->build($row->source, $keyword);
-        echo $fullPath;
-        echo 'building image';
+        echo "<img src='/$fullPath'>";
         return $this->uploadBG($fullPath, $row);
     }
 
@@ -179,8 +174,7 @@ class builder extends TweetBG_Controller
         {
             //TODO: log message in log table
             //die(var_dump($e->getMessage()));
-        }
-        echo $code;        
+        }    
         return $code;
     }   
 }
