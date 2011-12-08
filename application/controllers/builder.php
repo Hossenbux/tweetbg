@@ -120,11 +120,15 @@ class builder extends TweetBG_Controller
                 //a method that returns strong with no prepositions
                 $code = 500;
                 $tries = 0;
-                do
-                {
-                    $tries++;
-                    $code = $this->createImage($row, $keywords);                                                
-                }  while($tries < 5 && $code == 500);
+                if(count($keyword)) {
+                    do {
+                        $tries++;
+                        $code = $this->createImage($row, $keywords); 
+                        echo $code;                                               
+                    } while($tries < 5 && $code == 500);
+                } else {
+                    $code == 201;
+                }
                    
                 if($code == 200) 
                 {
@@ -167,13 +171,12 @@ class builder extends TweetBG_Controller
                 true, // use auth
                 true  // multipart
             );        
-
-        
         } 
         catch (Exception $e)
         {
             //TODO: log message in log table
             //die(var_dump($e->getMessage()));
+            print_r($e->getMessage());
         }    
         return $code;
     }   
