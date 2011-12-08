@@ -68,10 +68,20 @@ class ImageBuilder extends CI_Model
     
     function pic500px($keyword) 
     {
-        $oauth = new OAuth('xHkW9aeTnoYk4k1lUYicCjbKY9VXjYOWxE3OsBt8', 'SoxoUAwEOuV2lSQKLWRcj5Tm2LM4X1l4hMlr2Skc', OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
-        $oauth->enableDebug();
-        $oauth->fetch("https://api.500px.com/v1/photos/search?term=$keyword&rpp=100");
-        $content = json_decode($oauth->getLastResponse());  
+        try{
+            $oauth = new OAuth('xHkW9aeTnoYk4k1lUYicCjbKY9VXjYOWxE3OsBt8', 'SoxoUAwEOuV2lSQKLWRcj5Tm2LM4X1l4hMlr2Skc', OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
+            $oauth->enableDebug();
+            $params = array(
+                'term' => $keyword,
+                'rpp' => 100,
+                'consumer_key' => 'xHkW9aeTnoYk4k1lUYicCjbKY9VXjYOWxE3OsBt8'
+            );
+            $oauth->fetch("https://api.500px.com/v1/photos/search", $params, OAUTH_HTTP_METHOD_GET);
+            $content = json_decode($oauth->getLastResponse());
+            
+        } catch (Exception $e) { 
+            echo $e->getMessage();         
+        }
 
         $c = 0;
         $images = array();

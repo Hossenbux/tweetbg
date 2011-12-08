@@ -116,7 +116,6 @@ class builder extends TweetBG_Controller
                 $tweet =  $json[0];
                 //clean tweet                   
                 $keywords = $this->tweet->cleanTweet($tweet->text);                
-                print_r($keywords);
                 //a method that returns strong with no prepositions
                 $code = 500;
                 $tries = 0;
@@ -143,7 +142,6 @@ class builder extends TweetBG_Controller
     private function createImage($row, $keyword)
     {
         $fullPath = $this->imagebuilder->build($row->source, $keyword);
-        echo "<img src='/$fullPath'>";
         return $this->uploadBG($fullPath, $row);
     }
 
