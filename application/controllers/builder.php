@@ -7,6 +7,9 @@ class builder extends TweetBG_Controller
     {
         parent::__construct();
         
+        require_once('tmhOAuth.php');
+        require_once('tmhUtilities.php');
+        
         $this->load->library('session');
         $this->load->database();
         $this->load->model('imagebuilder');
@@ -146,10 +149,7 @@ class builder extends TweetBG_Controller
     }
 
     private function uploadBG($fullPath, $row)
-    {
-        require_once('tmhOAuth.php');
-        require_once('tmhUtilities.php');
-        
+    {   
         $tmhOAuth = new tmhOAuth(array(
             'consumer_key'    => $this->getConsumer(),
             'consumer_secret' => $this->getSecret(),
