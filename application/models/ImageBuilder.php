@@ -19,14 +19,7 @@ class ImageBuilder extends CI_Model
         {
             foreach ($keyword as $word) 
             {
-                if(!count($images))
-                {
-                    $images = $this->{$source}($word);
-                }
-                else 
-                {
-                    array_merge($images, $this->{$source}($word));
-                }
+                $images = array_merge($images, $this->{$source}($word));
             }
         }
         else 
