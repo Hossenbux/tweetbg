@@ -51,7 +51,8 @@ class builder extends TweetBG_Controller
                     catch (Exception $e)
                     {
                         //TODO: update log table with message
-                        echo var_dump($e->getCode());
+                        print_r($row);
+			echo var_dump($e->getCode());
                         //if($e->getCode() == '401')
                             //$this->db->query("UPDATE source_token SET authenticated='reauthenticate' WHERE screen_name='$name'");   
                     }
@@ -123,7 +124,7 @@ class builder extends TweetBG_Controller
                     do {
                         $tries++;
                         $code = $this->createImage($row, $keywords); 
-                        echo $code;                                               
+			echo $code;                                               
                     } while($tries < 5 && $code == 500);
                 } else {
                     $code == 201;
