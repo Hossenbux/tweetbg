@@ -78,7 +78,7 @@ class ImageBuilder extends CI_Model
             );
             $oauth->fetch("https://api.500px.com/v1/photos/search", $params, OAUTH_HTTP_METHOD_GET);
             $content = json_decode($oauth->getLastResponse());
-            
+            die(print_r($content));
         } catch (Exception $e) { 
             echo $e->getMessage();         
         }

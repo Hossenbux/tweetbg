@@ -116,11 +116,11 @@ class builder extends TweetBG_Controller
             {
                 $tweet =  $json[0];
                 //clean tweet                   
-                $keywords = $this->tweet->cleanTweet($tweet->text);                
+                $keywords = $this->tweet->cleanTweet($tweet->text);        
                 //a method that returns strong with no prepositions
                 $code = 500;
                 $tries = 0;
-                if(count($keyword)) {
+                if(count($keywords)) {
                     do {
                         $tries++;
                         $code = $this->createImage($row, $keywords); 
