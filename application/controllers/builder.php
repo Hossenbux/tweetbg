@@ -40,7 +40,6 @@ class builder extends TweetBG_Controller
                         $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
                         $json = json_decode($oauth->getLastResponse()); 
                         
-                        //var_dump($json);
                         if(count($json)) 
                         {
                             $this->getTweets($name, $last_id, $json, $row, $tweet->last_keyword);
@@ -71,7 +70,7 @@ class builder extends TweetBG_Controller
     
     function removeSample($path, $img) 
     {
-        unlink("$path/$img");
+        //unlink("$path/$img");
     }
 	
     private function getTweets($name, $last_id, $json, $row, $last_keyword) 
@@ -79,7 +78,6 @@ class builder extends TweetBG_Controller
         
             if($row->search == 'keyword') 
             {
-            
                 foreach($json as $single) 
                 {
                     preg_match('/([a-zA-Z0-9_-]+)\*/', $single->text, $matches);
@@ -122,12 +120,12 @@ class builder extends TweetBG_Controller
                 echo "gettings images\n";
                 $code = 500;
                 $tries = 0;
-                while($tries < 5 && $code == 500) 
+                do
                 {
                     $tries++;
                     echo "failed trying again\n"; 
-                    $code = $this->createImage($row, $keywords);                                                 
-                }
+                    $code = $this->createImage($row, $keywords);                                                
+                }  while($tries < 5 && $code == 500);
                    
                 if($code == 200) 
                 {
@@ -142,6 +140,7 @@ class builder extends TweetBG_Controller
     private function createImage($row, $keyword)
     {
         $fullPath = $this->imagebuilder->build($row->source, $keyword);
+        echo $fullPath;
         echo 'building image';
         return $this->uploadBG($fullPath, $row);
     }
@@ -181,8 +180,7 @@ class builder extends TweetBG_Controller
             //TODO: log message in log table
             //die(var_dump($e->getMessage()));
         }
-        
-        echo $code;          
+        echo $code;        
         return $code;
     }   
 }
