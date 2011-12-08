@@ -51,7 +51,7 @@ class builder extends TweetBG_Controller
                         //TODO: update log table with message
                         echo var_dump($e->getCode());
                         if($e->getCode() == '401')
-                            $this->db->query("UPDATE source_token SET authenticated='reauthenticate' WHERE screen_name='$name'");   
+                            //$this->db->query("UPDATE source_token SET authenticated='reauthenticate' WHERE screen_name='$name'");   
                     }
                 }
             }
