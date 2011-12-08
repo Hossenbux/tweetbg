@@ -78,9 +78,10 @@ class ImageBuilder extends CI_Model
             $oauth->fetch("https://api.500px.com/v1/photos/search?term=$keyword", $params, OAUTH_HTTP_METHOD_GET);
             $content = json_decode($oauth->getLastResponse());
         } catch (Exception $e) { 
-            echo $e->getMessage();         
+            echo $e->getMessage();     
+            return false;  
         }
-
+        
         $c = 0;
         $images = array();
         foreach($content->photos as $photo)
@@ -120,7 +121,7 @@ class ImageBuilder extends CI_Model
         {
             //TODO: log error in log table
             echo $e->getMessage();
-            return;
+            return false;
         }
         $content = json_decode($oauth->getLastResponse());
         

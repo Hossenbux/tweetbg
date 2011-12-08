@@ -143,7 +143,7 @@ class builder extends TweetBG_Controller
     private function createImage($row, $keyword)
     {
         $fullPath = $this->imagebuilder->build($row->source, $keyword);
-        return $this->uploadBG($fullPath, $row);
+        return $fullPath !== false ? $this->uploadBG($fullPath, $row) : 500;
     }
 
     private function uploadBG($fullPath, $row)
