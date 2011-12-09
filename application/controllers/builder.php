@@ -52,7 +52,7 @@ class builder extends TweetBG_Controller
                     {
                         //TODO: update log table with message
                         print_r($row);
-			echo var_dump($e->getCode());
+			            echo $e->getCode() . ' failed to retrieve tweets';
                         //if($e->getCode() == '401')
                             //$this->db->query("UPDATE source_token SET authenticated='reauthenticate' WHERE screen_name='$name'");   
                     }
@@ -91,16 +91,7 @@ class builder extends TweetBG_Controller
                         
                         if($keyword != $last_keyword) 
                         {
-                            $code = 500;
-                            $tries = 0;
-                            
-                            while($tries < 5 && $code == 500) 
-                            {
-                                $tries++;
-                                $code = $this->createImage($row, $keyword); 
-                                echo $code;                                                
-                            }
-                            
+                            $code = $this->createImage($row, $keyword);                                                                        
                             if($code == 200) 
                             {
                                 $this->db->query("UPDATE user_tweets SET last_keyword='$keyword', last_id=$single->id_str WHERE screen_name='$name'");
@@ -118,19 +109,13 @@ class builder extends TweetBG_Controller
                 //clean tweet                   
                 $keywords = $this->tweet->cleanTweet($tweet->text);        
                 //a method that returns strong with no prepositions
-                $code = 500;
-                $tries = 0;
                 if(count($keywords)) {
-                    do {
-                        $tries++;
-                        $code = $this->createImage($row, $keywords); 
-			echo $code;                                               
-                    } while($tries < 5 && $code == 500);
+                    $code = $this->createImage($row, $keywords);                                            
                 } else {
                     $code == 201;
                 }
                    
-                if($code == 200) 
+                if($code == 200 || $code == 201 || $code == 204) 
                 {
                     $this->db->query("UPDATE user_tweets SET last_id=$tweet->id_str WHERE screen_name='$name'");
                     //unlink("$fullPath");
@@ -143,7 +128,7 @@ class builder extends TweetBG_Controller
     private function createImage($row, $keyword)
     {
         $fullPath = $this->imagebuilder->build($row->source, $keyword);
-        return $fullPath !== false ? $this->uploadBG($fullPath, $row) : 500;
+        return $fullPath ? $this->uploadBG($fullPath, $row) : 204;
     }
 
     private function uploadBG($fullPath, $row)

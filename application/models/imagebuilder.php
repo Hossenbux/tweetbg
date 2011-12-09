@@ -29,6 +29,10 @@ class ImageBuilder extends CI_Model
         
         $tries = 0;
         $max = count($images);
+
+        if(count($images) == 0) {
+            return false;
+        }
         
         $new_image = imagecreatetruecolor(140*$i_l, 140*$j_l);
         for ($i = 0; $i < $i_l; $i++)
@@ -78,12 +82,12 @@ class ImageBuilder extends CI_Model
             $oauth->fetch("https://api.500px.com/v1/photos/search?term=$keyword", $params, OAUTH_HTTP_METHOD_GET);
             $content = json_decode($oauth->getLastResponse());
         } catch (Exception $e) { 
-            echo $e->getMessage();     
-            return false;  
+            //echo $e->getMessage();  
+            return;
         }
-        
         $c = 0;
         $images = array();
+
         foreach($content->photos as $photo)
         {            
             if ($photo->rating < 5) 
@@ -96,7 +100,7 @@ class ImageBuilder extends CI_Model
             }
             $c++;
         }
-        return $images;
+        return count($images) ? $images : false;
         
     }
     
@@ -120,8 +124,7 @@ class ImageBuilder extends CI_Model
         catch (Exception $e)
         {
             //TODO: log error in log table
-            echo $e->getMessage();
-            return false;
+            //echo $e->getMessage();
         }
         $content = json_decode($oauth->getLastResponse());
         
@@ -131,7 +134,7 @@ class ImageBuilder extends CI_Model
             array_push($images, $photo->url_s);
         }
         
-        return $images;
+        return count($images) ? $images : false;;
         
     }
      
@@ -166,7 +169,7 @@ class ImageBuilder extends CI_Model
                                       
         } while($count < 20);
         
-        return $images;
+        return count($images) ? $images : false;
               
     }
 }
