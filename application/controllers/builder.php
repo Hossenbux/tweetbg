@@ -31,7 +31,6 @@ class builder extends TweetBG_Controller
                 
                  foreach ($tweets->result() as $tweet) 
                  {
-                    
                     $oauth = new OAuth($this->getConsumer(), $this->getSecret(), OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
                     $oauth->enableDebug();
                     $oauth->setToken($row->access_token, $row->token_secret);
@@ -41,7 +40,7 @@ class builder extends TweetBG_Controller
                     {
                         $oauth->fetch("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=$name&since_id=$last_id&trim_user=true"); 
                         $json = json_decode($oauth->getLastResponse()); 
-                        
+
                         if(count($json)) 
                         {
                             $this->getTweets($name, $last_id, $json, $row, $tweet->last_keyword);
@@ -78,7 +77,6 @@ class builder extends TweetBG_Controller
 	
     private function getTweets($name, $last_id, $json, $row, $last_keyword) 
     {
-        
             if($row->search == 'keyword') 
             {
                 foreach($json as $single) 
@@ -107,10 +105,10 @@ class builder extends TweetBG_Controller
             {
                 $tweet =  $json[0];
                 //clean tweet                   
-                $keywords = $this->tweet->cleanTweet($tweet->text);        
-                //a method that returns strong with no prepositions
+                $keywords = $this->tweet->cleanTweet($tweet->text);
+         	//a method that returns strong with no prepositions
                 if(count($keywords)) {
-                    $code = $this->createImage($row, $keywords);                                            
+                    $code = $this->createImage($row, $keywords);
                 } else {
                     $code == 201;
                 }
@@ -162,6 +160,7 @@ class builder extends TweetBG_Controller
             //die(var_dump($e->getMessage()));
             print_r($e->getMessage());
         }    
+echo $code;
         return $code;
     }   
 }
